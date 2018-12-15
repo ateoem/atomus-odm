@@ -1,5 +1,4 @@
 import AggregateMapping from "../Mapping/AggregateMapping";
-import Aggregate from "./Aggregate";
 import AggregateManager from "./AggregateManager";
 
 abstract class AggregateRepository {

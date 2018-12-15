@@ -1,6 +1,6 @@
 import Aggregate from "../Model/Aggregate/Aggregate";
 import FieldValue from "../Model/Aggregate/FieldValue";
-import IAggregateNormalizer from "../Model/Aggregate/IAggregateNormalizer";
+import IAggregateNormalizer from "../Model/ODM/IAggregateNormalizer";
 import AggregateMapping from "../Model/Mapping/AggregateMapping";
 
 class JSONDenormalizer implements IAggregateNormalizer {

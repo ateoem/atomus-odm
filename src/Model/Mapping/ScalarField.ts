@@ -2,7 +2,7 @@ import Field from "./Field";
 import FieldType from "./FieldType";
 
 class ScalarField extends Field {
-    private type: FieldType;
+    protected type: FieldType;
 
     constructor(name: string, type: FieldType) {
         super();
@@ -12,6 +12,11 @@ class ScalarField extends Field {
 
     get $type(): FieldType {
         return this.type;
+    }
+
+    public isEqual(comparedField: ScalarField) {
+        return comparedField.$name === this.$name
+            && comparedField.$type === this.type;
     }
 }
 

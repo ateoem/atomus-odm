@@ -1,10 +1,9 @@
-import Aggregate from "./Aggregate";
-import AggregateChanges from "./AggregateChanges";
+import Aggregate from "../Aggregate/Aggregate";
+import AggregateChanges from "../Aggregate/AggregateChanges";
 
 class ManagedAggregate {
     private aggregate: Aggregate;
     private changes: AggregateChanges;
-
 
     constructor($aggregate: Aggregate, $changes: AggregateChanges) {
         this.aggregate = $aggregate;

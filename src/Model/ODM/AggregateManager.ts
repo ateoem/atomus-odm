@@ -1,6 +1,6 @@
+import Aggregate from "../Aggregate/Aggregate";
+import AggregateChanges from "../Aggregate/AggregateChanges";
 import AggregateMapping from "../Mapping/AggregateMapping";
-import Aggregate from "./Aggregate";
-import AggregateChanges from "./AggregateChanges";
 import IAggregateNormalizer from "./IAggregateNormalizer";
 import ManagedAggregate from "./ManagedAggregate";
 
