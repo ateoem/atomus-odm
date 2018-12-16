@@ -4,7 +4,8 @@
   "description": "CSV based restful API for testing purposes",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "tslint --project tsconfig.json --fix"
   },
   "author": "Mateusz Fejczaruk",
   "license": "ISC",

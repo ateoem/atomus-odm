@@ -5,8 +5,7 @@ describe("ManagedAggregate", () => {
     it("should have getters/setters.", () => {
         const aggregate = new Aggregate();
         const changes = new AggregateChanges();
-        const managedAggregate = new ManagedAggregate(aggregate, changes);
-        expect(managedAggregate.$changes).toBe(changes);
+        const managedAggregate = new ManagedAggregate(aggregate);
         expect(managedAggregate.$aggregate).toBe(aggregate);
     });
 });

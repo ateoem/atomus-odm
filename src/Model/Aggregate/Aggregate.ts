@@ -1,20 +1,19 @@
 import {v1 as uuid} from "uuid";
 import AggregateMapping from "../Mapping/AggregateMapping";
+import Field from "../Mapping/Field";
 import FieldType from "../Mapping/FieldType";
 import ScalarField from "../Mapping/ScalarField";
 import AggregateChange from "./AggregateChange";
 import AggregateChanges from "./AggregateChanges";
 import FieldValue from "./FieldValue";
-import Field from "../Mapping/Field";
 
 class Aggregate {
     public static createEmpty(
-            name: string,
             aggregateMapping: AggregateMapping,
             fieldValues: FieldValue[] = [],
             ): Aggregate {
         const aggregate = new Aggregate();
-        aggregate.name = name;
+        aggregate.name = aggregateMapping.$name;
         aggregate.aggregateMapping = new AggregateMapping(aggregateMapping.$name);
         aggregate.aggregateMapping.$fields.push(...aggregateMapping.$fields);
         aggregate.fieldValues = [...fieldValues];
@@ -42,15 +41,22 @@ class Aggregate {
         return this.fieldValues.find((fieldValue) => fieldValue.$field.$name === "id").$value;
     }
 
+    get $name(): string {
+        return this.name;
+    }
+
     get $fieldValues() {
         return this.fieldValues;
     }
 
     public computeChanges(dirtyAggregate: Aggregate): AggregateChanges {
+        if (dirtyAggregate.$fieldValues.length !== this.fieldValues.length) {
+            throw new Error("Incosinstensy error.");
+        }
         const changes = new AggregateChanges();
         this.$fieldValues.forEach( (fieldValue) => {
             const dirtyFieldValue = dirtyAggregate.$fieldValues
-            .find((dirtyElem) => dirtyElem.$field.$name === fieldValue.$field.$name);
+            .find((dirtyElem) => dirtyElem.$field.isEqual(fieldValue.$field));
 
             if (dirtyFieldValue === undefined) { throw new Error("Field not found!"); }
             if (JSON.stringify(dirtyFieldValue.$value) !== JSON.stringify(fieldValue.$value)) {

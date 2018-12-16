@@ -5,9 +5,8 @@ class ManagedAggregate {
     private aggregate: Aggregate;
     private changes: AggregateChanges;
 
-    constructor($aggregate: Aggregate, $changes: AggregateChanges) {
+    constructor($aggregate: Aggregate) {
         this.aggregate = $aggregate;
-        this.changes = $changes;
     }
 
     public id() {

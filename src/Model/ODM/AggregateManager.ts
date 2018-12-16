@@ -7,6 +7,7 @@ import ManagedAggregate from "./ManagedAggregate";
 abstract class AggregateManager {
     private managedAggregates: ManagedAggregate[];
     private normalizer: IAggregateNormalizer;
+    private mappings: AggregateMapping[];
 
     constructor($normalizer: IAggregateNormalizer) {
         this.normalizer = $normalizer;
@@ -26,7 +27,11 @@ abstract class AggregateManager {
     }
 
     public manageAggregate(aggregate: Aggregate) {
-        this.managedAggregates.push(new ManagedAggregate(aggregate, new AggregateChanges()));
+        this.managedAggregates.push(new ManagedAggregate(aggregate));
+    }
+
+    public get $mappings(): AggregateMapping[] {
+        return this.mappings;
     }
 
     public abstract flush();

@@ -13,7 +13,7 @@ class FieldValue {
         return this.field;
     }
 
-    public get $value(): object {
+    public get $value(): any {
         return this.value;
     }
 }
