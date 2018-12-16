@@ -5,6 +5,7 @@ import Field from "../Model/Mapping/Field";
 import AggregateManager from "../Model/ODM/AggregateManager";
 import IAggregateNormalizer from "../Model/ODM/IAggregateNormalizer";
 import ManagedAggregate from "../Model/ODM/ManagedAggregate";
+import ScalarField from "../Model/Mapping/ScalarField";
 
 class JSONDenormalizer implements IAggregateNormalizer {
     private manager: AggregateManager;
@@ -16,24 +17,24 @@ class JSONDenormalizer implements IAggregateNormalizer {
         }, {});
 
         const metadata = {aggregateName: aggregate.$name};
+        computedFields[this.manager.$symbol] = metadata;
 
-        return {...computedFields, ...{metadata}};
+        return computedFields;
     }
 
     public denormalize(payload: any): Aggregate {
-        // const tmp = {...payload};
-        // const mappingAggregate = this.manager.$mappings.find(
-        //      (mapping: AggregateMapping) => mapping.$name === payload.metadata.aggregateName );
-        // if (!mappingAggregate) {
-        //     throw new Error("Mapping Aggregate not found!");
-        // }
-        // delete tmp.metadata;
-        // const aggregate = Aggregate.createEmpty(mappingAggregate);
-        // tmp.forEach((key, value) => {
+        const tmp = {...payload};
+        const mappingAggregate = this.manager.$mappings.find(
+             (mapping: AggregateMapping) => mapping.$name === payload[this.manager.$symbol].aggregateName );
+        if (!mappingAggregate) {
+            throw new Error("Mapping Aggregate not found!");
+        }
+        const fieldVals = Object.keys(tmp).map((key) => {
+            const gotField = mappingAggregate.$fields.find((field: ScalarField) => field.$name === key);
+            return new FieldValue(gotField, {value: tmp[key]});
+        });
 
-        // });
-
-        return new Aggregate();
+        return Aggregate.createEmpty(mappingAggregate, fieldVals);
     }
 
     public setAggregateManager(manager: AggregateManager) {

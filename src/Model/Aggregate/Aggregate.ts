@@ -49,6 +49,10 @@ class Aggregate {
         return this.fieldValues;
     }
 
+    get $mapping(): AggregateMapping {
+        return this.aggregateMapping;
+    }
+
     public computeChanges(dirtyAggregate: Aggregate): AggregateChanges {
         if (dirtyAggregate.$fieldValues.length !== this.fieldValues.length) {
             throw new Error("Incosinstensy error.");

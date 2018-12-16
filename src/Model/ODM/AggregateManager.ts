@@ -8,9 +8,12 @@ abstract class AggregateManager {
     private managedAggregates: ManagedAggregate[];
     private normalizer: IAggregateNormalizer;
     private mappings: AggregateMapping[];
+    private metadataSymbol: symbol;
 
     constructor($normalizer: IAggregateNormalizer) {
         this.normalizer = $normalizer;
+        this.metadataSymbol = Symbol();
+        this.mappings = [];
     }
 
     public persist(payload: object, mapping: AggregateMapping) {
@@ -32,6 +35,10 @@ abstract class AggregateManager {
 
     public get $mappings(): AggregateMapping[] {
         return this.mappings;
+    }
+
+    public get $symbol(): symbol {
+        return this.metadataSymbol;
     }
 
     public abstract flush();

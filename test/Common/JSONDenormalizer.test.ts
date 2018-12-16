@@ -24,15 +24,16 @@ describe("AggregateManager", () => {
     const managedAggregate = new ManagedAggregate(aggregate);
     const aggregateMock = new AggregateManagerMock(denormalizer);
     denormalizer.setAggregateManager(aggregateMock);
+    aggregateMock.$mappings.push(aggregateMapping);
 
     it("should map managed aggregate to JSON with metadata.", () => {
         const json = {
             id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-            metadata: {
-                aggregateName: "test_aggr",
-            },
             name: "test",
             surname: "ipsum",
+            [aggregateMock.$symbol]: {
+                aggregateName: "test_aggr",
+            },
         };
         const denormalizedJSON = denormalizer.normalize(managedAggregate.$aggregate);
         expect(denormalizedJSON).toEqual(json);
@@ -41,7 +42,7 @@ describe("AggregateManager", () => {
     it("should map JSON with metadata to aggregate.", () => {
         const json = {
             id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-            metadata: {
+            [aggregateMock.$symbol]: {
                 aggregateName: "test_aggr",
             },
             name: "test",
