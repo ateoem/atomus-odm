@@ -1,5 +1,5 @@
-import Aggregate from "../Aggregate/Aggregate";
 import AggregateChanges from "../Aggregate/AggregateChanges";
+import MappedAggregate from "../Aggregate/MappedAggregate";
 import AggregateMapping from "../Mapping/AggregateMapping";
 import IAggregateNormalizer from "./IAggregateNormalizer";
 import ManagedAggregate from "./ManagedAggregate";
@@ -29,7 +29,7 @@ abstract class AggregateManager {
         originAggregate.updateChanges(changes);
     }
 
-    public manageAggregate(aggregate: Aggregate) {
+    public manageAggregate(aggregate: MappedAggregate) {
         if (this.managedAggregates.has(aggregate.$id)) {
             throw new Error("Entity already in manage!");
         }

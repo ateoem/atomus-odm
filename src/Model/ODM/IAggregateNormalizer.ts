@@ -1,10 +1,10 @@
-import Aggregate from "../Aggregate/Aggregate";
+import MappedAggregate from "../Aggregate/MappedAggregate";
 import AggregateMapping from "../Mapping/AggregateMapping";
 import AggregateManager from "./AggregateManager";
 
 interface IAggregateNormalizer {
-    normalize(aggregate: Aggregate): object;
-    denormalize(payload: any, mapping: AggregateMapping): Aggregate;
+    normalize(aggregate: MappedAggregate): object;
+    denormalize(payload: any, mapping: AggregateMapping): MappedAggregate;
     setAggregateManager(manager: AggregateManager);
 }
 

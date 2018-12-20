@@ -1,16 +1,19 @@
 import Aggregate from "../Aggregate/Aggregate";
 import AggregateChange from "../Aggregate/AggregateChange";
 import AggregateChanges from "../Aggregate/AggregateChanges";
+import MappedAggregate from "../Aggregate/MappedAggregate";
 
-class ManagedAggregate {
-    private aggregate: Aggregate;
+class ManagedAggregate extends Aggregate {
+    private aggregate: MappedAggregate;
     private changes: AggregateChanges;
 
-    constructor($aggregate: Aggregate) {
+    constructor($aggregate: MappedAggregate) {
+        super();
         this.aggregate = $aggregate;
+        this.changes = new AggregateChanges();
     }
 
-    public id() {
+    public get $id() {
         return this.aggregate.$id;
     }
 
@@ -18,7 +21,7 @@ class ManagedAggregate {
      * Getter $aggregate
      * @return {Aggregate}
      */
-    public get $aggregate(): Aggregate {
+    public get $aggregate(): MappedAggregate {
         return this.aggregate;
     }
 

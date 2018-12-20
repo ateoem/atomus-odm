@@ -1,6 +1,6 @@
 import JSONDenormalizer from "../../src/Common/JSONDenormalizer";
-import Aggregate from "../../src/Model/Aggregate/Aggregate";
 import FieldValue from "../../src/Model/Aggregate/FieldValue";
+import MappedAggregate from "../../src/Model/Aggregate/MappedAggregate";
 import AggregateMapping from "../../src/Model/Mapping/AggregateMapping";
 import Field from "../../src/Model/Mapping/Field";
 import FieldType from "../../src/Model/Mapping/FieldType";
@@ -20,7 +20,7 @@ describe("AggregateManager", () => {
         new FieldValue(idField, {value: "9181ee1a-030b-40d3-9d2c-168db5c03c5e"}),
     ];
     const aggregateMapping = new AggregateMapping("test_aggr", fields);
-    const aggregate = new Aggregate(aggregateMapping, fieldValues);
+    const aggregate = new MappedAggregate(aggregateMapping, fieldValues);
     const managedAggregate = new ManagedAggregate(aggregate);
     const aggregateMock = new AggregateManagerMock(denormalizer);
     denormalizer.setAggregateManager(aggregateMock);
@@ -48,7 +48,7 @@ describe("AggregateManager", () => {
             name: "test",
             surname: "ipsum",
         };
-        const denormalizedAggregate: Aggregate = denormalizer.denormalize(json);
+        const denormalizedAggregate: MappedAggregate = denormalizer.denormalize(json);
         expect(denormalizedAggregate.computeChanges(aggregate).$changed.size).toEqual(0);
     });
 });
