@@ -1,21 +1,17 @@
 import AggregateChange from "./AggregateChange";
 
 class AggregateChanges {
-    private changed: AggregateChange[];
+    private changed: Map<string, AggregateChange>;
 
     constructor() {
-        this.changed = [];
+        this.changed = new Map();
     }
 
-    public addChange(change: AggregateChange) {
-        this.changed.push(change);
+    public setChange(change: AggregateChange) {
+        this.changed.set(change.$field.$name, change);
     }
 
-    public length(): number {
-        return this.changed.length;
-    }
-
-    public get $changed(): AggregateChange[] {
+    public get $changed(): Map<string, AggregateChange> {
         return this.changed;
     }
 }

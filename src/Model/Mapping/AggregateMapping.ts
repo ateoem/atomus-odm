@@ -1,17 +1,32 @@
-import Field from "./ScalarField";
+import Field from "./Field";
 
 class AggregateMapping {
-    private fields: Field[];
+    private fields: Map<string, Field>;
     private name: string;
 
     constructor(name: string, fields: Field[] = []) {
         this.name = name;
-        this.fields = fields;
+        this.fields = new Map();
+        fields.forEach((field: Field) => {
+            this.fields.set(field.$name, field);
+        });
         // this.guardAgainstCircularReference(children);
     }
 
-    public get $fields(): Field[] {
+    public addFields(...fields: Field[]) {
+        fields.forEach((field: Field) => this.addField(field));
+    }
+
+    public addField(field: Field) {
+        this.fields.set(field.$name, field);
+    }
+
+    public get $fields(): Map<string, Field> {
         return this.fields;
+    }
+
+    public get $fieldsArray(): Field[] {
+        return Array.from(this.fields.values());
     }
 
     public get $name(): string {

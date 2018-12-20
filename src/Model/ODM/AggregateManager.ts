@@ -5,21 +5,21 @@ import IAggregateNormalizer from "./IAggregateNormalizer";
 import ManagedAggregate from "./ManagedAggregate";
 
 abstract class AggregateManager {
-    private managedAggregates: ManagedAggregate[];
+    private managedAggregates: Map<string, ManagedAggregate>;
     private normalizer: IAggregateNormalizer;
-    private mappings: AggregateMapping[];
+    private mappings: Map<string, AggregateMapping>;
     private metadataSymbol: symbol;
 
     constructor($normalizer: IAggregateNormalizer) {
         this.normalizer = $normalizer;
         this.metadataSymbol = Symbol();
-        this.mappings = [];
+        this.mappings = new Map();
+        this.managedAggregates = new Map();
     }
 
     public persist(payload: object, mapping: AggregateMapping) {
         const dirtyAggregate = this.normalizer.denormalize(payload, mapping);
-        const originAggregate: ManagedAggregate = this.managedAggregates
-        .find( (aggregate) => aggregate.id() === dirtyAggregate.id());
+        const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.id());
 
         if (!originAggregate) {
             throw new Error("Aggregate not found!");
@@ -30,10 +30,13 @@ abstract class AggregateManager {
     }
 
     public manageAggregate(aggregate: Aggregate) {
-        this.managedAggregates.push(new ManagedAggregate(aggregate));
+        if (this.managedAggregates.has(aggregate.$id) {
+            throw new Error("Entity already in manage!");
+        }
+        this.managedAggregates.set(aggregate.$id, new ManagedAggregate(aggregate));
     }
 
-    public get $mappings(): AggregateMapping[] {
+    public get $mappings(): Map<string, AggregateMapping> {
         return this.mappings;
     }
 

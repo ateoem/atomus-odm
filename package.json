@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test-cov": "jest --coverage",
     "lint": "tslint --project tsconfig.json --fix"
   },
   "author": "Mateusz Fejczaruk",

@@ -1,4 +1,5 @@
 import Aggregate from "../Aggregate/Aggregate";
+import AggregateChange from "../Aggregate/AggregateChange";
 import AggregateChanges from "../Aggregate/AggregateChanges";
 
 class ManagedAggregate {
@@ -10,7 +11,7 @@ class ManagedAggregate {
     }
 
     public id() {
-        return this.aggregate.id();
+        return this.aggregate.$id;
     }
 
     /**
@@ -25,8 +26,8 @@ class ManagedAggregate {
      * Getter $changes
      * @return {AggregateChanges}
      */
-    public get $changes(): AggregateChanges {
-        return this.changes;
+    public get $changes(): Map<string, AggregateChange> {
+        return this.changes.$changed;
     }
 
     /**
