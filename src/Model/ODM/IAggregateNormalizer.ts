@@ -4,7 +4,7 @@ import AggregateManager from "./AggregateManager";
 
 interface IAggregateNormalizer {
     normalize(aggregate: MappedAggregate): object;
-    denormalize(payload: any, mapping: AggregateMapping): MappedAggregate;
+    denormalize(payload: any): MappedAggregate;
     setAggregateManager(manager: AggregateManager);
 }
 

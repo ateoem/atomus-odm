@@ -1,9 +1,9 @@
-import FieldValue from "../../src/Model/Aggregate/FieldValue";
-import MappedAggregate from "../../src/Model/Aggregate/MappedAggregate";
-import AggregateMapping from "../../src/Model/Mapping/AggregateMapping";
-import Field from "../../src/Model/Mapping/Field";
-import FieldType from "../../src/Model/Mapping/FieldType";
-import ManagedAggregate from "../../src/Model/ODM/ManagedAggregate";
+import FieldValue from "../../../src/Model/Aggregate/FieldValue";
+import MappedAggregate from "../../../src/Model/Aggregate/MappedAggregate";
+import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
+import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
+import ManagedAggregate from "../../../src/Model/ODM/ManagedAggregate";
 
 describe("ManagedAggregate", () => {
     it("should have getters/setters.", () => {

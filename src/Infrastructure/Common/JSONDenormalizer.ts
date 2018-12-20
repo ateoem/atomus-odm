@@ -1,13 +1,13 @@
-import FieldValue from "../Model/Aggregate/FieldValue";
-import MappedAggregate from "../Model/Aggregate/MappedAggregate";
-import AggregateManager from "../Model/ODM/AggregateManager";
-import IAggregateNormalizer from "../Model/ODM/IAggregateNormalizer";
+import FieldValue from "../../Model/Aggregate/FieldValue";
+import MappedAggregate from "../../Model/Aggregate/MappedAggregate";
+import AggregateManager from "../../Model/ODM/AggregateManager";
+import IAggregateNormalizer from "../../Model/ODM/IAggregateNormalizer";
 
 class JSONDenormalizer implements IAggregateNormalizer {
     private manager: AggregateManager;
 
     public normalize(aggregate: MappedAggregate): object {
-        const fieldValuesArray = Array.from(aggregate.$fieldValues.values());
+        const fieldValuesArray = aggregate.$fieldValuesArray;
         const computedFields = fieldValuesArray.reduce((jsonObj: object, fieldValue: FieldValue) => {
             jsonObj[fieldValue.$field.$name] = fieldValue.$value.value;
             return {...jsonObj};

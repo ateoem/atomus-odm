@@ -1,10 +1,10 @@
-import JSONDenormalizer from "../../src/Common/JSONDenormalizer";
-import FieldValue from "../../src/Model/Aggregate/FieldValue";
-import MappedAggregate from "../../src/Model/Aggregate/MappedAggregate";
-import AggregateMapping from "../../src/Model/Mapping/AggregateMapping";
-import Field from "../../src/Model/Mapping/Field";
-import FieldType from "../../src/Model/Mapping/FieldType";
-import ManagedAggregate from "../../src/Model/ODM/ManagedAggregate";
+import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
+import FieldValue from "../../../src/Model/Aggregate/FieldValue";
+import MappedAggregate from "../../../src/Model/Aggregate/MappedAggregate";
+import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
+import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
+import ManagedAggregate from "../../../src/Model/ODM/ManagedAggregate";
 import AggregateManagerMock from "./AggregateManagerMock";
 
 describe("AggregateManager", () => {

@@ -1,6 +1,7 @@
 import AggregateChanges from "../Aggregate/AggregateChanges";
 import MappedAggregate from "../Aggregate/MappedAggregate";
 import AggregateMapping from "../Mapping/AggregateMapping";
+import AggregateRepository from "./AggregateRepository";
 import IAggregateNormalizer from "./IAggregateNormalizer";
 import ManagedAggregate from "./ManagedAggregate";
 
@@ -17,8 +18,8 @@ abstract class AggregateManager {
         this.managedAggregates = new Map();
     }
 
-    public persist(payload: object, mapping: AggregateMapping) {
-        const dirtyAggregate = this.normalizer.denormalize(payload, mapping);
+    public persist(payload: object) {
+        const dirtyAggregate = this.normalizer.denormalize(payload);
         const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.$id);
 
         if (!originAggregate) {
@@ -29,12 +30,30 @@ abstract class AggregateManager {
         originAggregate.updateChanges(changes);
     }
 
-    public manageAggregate(aggregate: MappedAggregate) {
+    public manageAggregate(aggregate: ManagedAggregate) {
         if (this.managedAggregates.has(aggregate.$id)) {
             throw new Error("Entity already in manage!");
         }
-        this.managedAggregates.set(aggregate.$id, new ManagedAggregate(aggregate));
+        this.managedAggregates.set(aggregate.$id, aggregate);
     }
+
+    public createNewAggregate(mapping: AggregateMapping|string): object {
+        let newAggregate: ManagedAggregate;
+        if (mapping instanceof AggregateMapping) {
+            newAggregate = new ManagedAggregate(new MappedAggregate(mapping));
+        } else {
+            const retrievedMapping = this.mappings.get(mapping);
+            if (!retrievedMapping) {
+                throw new Error("Mapping not found!");
+            }
+            newAggregate = new ManagedAggregate(new MappedAggregate(retrievedMapping));
+        }
+
+        this.manageAggregate(newAggregate);
+        return this.normalizer.normalize(newAggregate.$aggregate);
+    }
+
+    public abstract getRepository(mapping: AggregateMapping|string): AggregateRepository;
 
     public get $mappings(): Map<string, AggregateMapping> {
         return this.mappings;

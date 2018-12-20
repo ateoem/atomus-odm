@@ -53,6 +53,10 @@ class MappedAggregate extends Aggregate {
         return this.fieldValues;
     }
 
+    public get $fieldValuesArray() {
+        return Array.from(this.$fieldValues.values());
+    }
+
     public get $mapping(): AggregateMapping {
         return this.aggregateMapping;
     }
