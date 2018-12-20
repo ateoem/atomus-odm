@@ -1,8 +1,8 @@
 import Aggregate from "../../../src/Model/Aggregate/Aggregate";
 import FieldValue from "../../../src/Model/Aggregate/FieldValue";
 import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("Aggregate", () => {
     const fields = [

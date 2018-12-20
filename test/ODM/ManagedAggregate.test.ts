@@ -2,9 +2,9 @@ import Aggregate from "../../src/Model/Aggregate/Aggregate";
 import AggregateChanges from "../../src/Model/Aggregate/AggregateChanges";
 import FieldValue from "../../src/Model/Aggregate/FieldValue";
 import AggregateMapping from "../../src/Model/Mapping/AggregateMapping";
+import Field from "../../src/Model/Mapping/Field";
 import FieldType from "../../src/Model/Mapping/FieldType";
 import ManagedAggregate from "../../src/Model/ODM/ManagedAggregate";
-import Field from "../../src/Model/Mapping/Field";
 
 describe("ManagedAggregate", () => {
     it("should have getters/setters.", () => {

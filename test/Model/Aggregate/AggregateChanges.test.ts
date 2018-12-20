@@ -1,7 +1,7 @@
 import AggregateChange from "../../../src/Model/Aggregate/AggregateChange";
 import AggregateChanges from "../../../src/Model/Aggregate/AggregateChanges";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("AggregateChanges", () => {
     it("should have setters/getters.", () => {

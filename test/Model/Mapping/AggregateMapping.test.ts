@@ -1,6 +1,6 @@
 import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("AggregateMapping", () => {
     it("should have setters/getters.", () => {

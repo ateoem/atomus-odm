@@ -2,11 +2,10 @@ import JSONDenormalizer from "../../src/Common/JSONDenormalizer";
 import Aggregate from "../../src/Model/Aggregate/Aggregate";
 import FieldValue from "../../src/Model/Aggregate/FieldValue";
 import AggregateMapping from "../../src/Model/Mapping/AggregateMapping";
+import Field from "../../src/Model/Mapping/Field";
 import FieldType from "../../src/Model/Mapping/FieldType";
 import ManagedAggregate from "../../src/Model/ODM/ManagedAggregate";
 import AggregateManagerMock from "./AggregateManagerMock";
-import Field from "../../src/Model/Mapping/Field";
-
 
 describe("AggregateManager", () => {
     const denormalizer = new JSONDenormalizer();

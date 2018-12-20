@@ -19,7 +19,7 @@ abstract class AggregateManager {
 
     public persist(payload: object, mapping: AggregateMapping) {
         const dirtyAggregate = this.normalizer.denormalize(payload, mapping);
-        const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.id());
+        const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.$id);
 
         if (!originAggregate) {
             throw new Error("Aggregate not found!");
@@ -30,7 +30,7 @@ abstract class AggregateManager {
     }
 
     public manageAggregate(aggregate: Aggregate) {
-        if (this.managedAggregates.has(aggregate.$id) {
+        if (this.managedAggregates.has(aggregate.$id)) {
             throw new Error("Entity already in manage!");
         }
         this.managedAggregates.set(aggregate.$id, new ManagedAggregate(aggregate));

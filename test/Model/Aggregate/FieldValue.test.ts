@@ -1,6 +1,6 @@
 import FieldValue from "../../../src/Model/Aggregate/FieldValue";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import Field from "../../../src/Model/Mapping/Field";
+import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("FieldValue", () => {
     it("should have setters/getters.", () => {
