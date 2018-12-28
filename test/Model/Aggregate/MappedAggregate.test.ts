@@ -6,6 +6,7 @@ import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("Aggregate", () => {
     const fields = [
+        new Field("id", FieldType.uuid),
         new Field("name", FieldType.string),
         new Field("surname", FieldType.string),
     ];

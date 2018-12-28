@@ -5,9 +5,9 @@ import FieldType from "../../../src/Model/Mapping/FieldType";
 describe("AggregateChange", () => {
     it("should have setters/getters.", () => {
         const field = new Field("test", FieldType.string);
-        const change = new AggregateChange(field, {value: 1}, {value: 2});
+        const change = new AggregateChange(field, 1, 2);
         expect(change.$field).toBe(field);
-        expect(change.$changed).toEqual({value: 2});
-        expect(change.$old).toEqual({value: 1});
+        expect(change.$changed).toEqual("2");
+        expect(change.$old).toEqual("1");
     });
 });

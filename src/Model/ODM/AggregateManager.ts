@@ -31,9 +31,6 @@ abstract class AggregateManager {
     }
 
     public manageAggregate(aggregate: ManagedAggregate) {
-        if (this.managedAggregates.has(aggregate.$id)) {
-            throw new Error("Entity already in manage!");
-        }
         this.managedAggregates.set(aggregate.$id, aggregate);
     }
 

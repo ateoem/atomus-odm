@@ -11,7 +11,7 @@ class JSONDenormalizer implements IAggregateNormalizer {
     public normalize(aggregate: MappedAggregate): object {
         const fieldValuesArray = aggregate.$fieldValuesArray;
         const computedFields = fieldValuesArray.reduce((jsonObj: object, fieldValue: FieldValue) => {
-            jsonObj[fieldValue.$field.$name] = fieldValue.$value.value;
+            jsonObj[fieldValue.$name] = fieldValue.$value;
             return {...jsonObj};
         }, {});
 
@@ -29,7 +29,7 @@ class JSONDenormalizer implements IAggregateNormalizer {
         }
         const fieldVals = Object.keys(tmp).map((key) => {
             const gotField: Field = mappingAggregate.$fields.get(key);
-            return new FieldValue(gotField, {value: tmp[key]});
+            return new FieldValue(gotField, tmp[key]);
         });
 
         return new MappedAggregate(mappingAggregate, fieldVals);

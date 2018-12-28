@@ -37,14 +37,14 @@ class InMemoryManager extends AggregateManager {
             const obj = {};
             if (!repository.$data.has(aggregate.$id)) {
                 aggregate.$aggregate.$fieldValuesArray.forEach( (fieldValue: FieldValue) => {
-                    obj[fieldValue.$field.$name] = fieldValue.$value.value;
+                    obj[fieldValue.$field.$name] = fieldValue.$value;
                 });
                 repository.$data.set(aggregate.$id, obj);
             }
             const aggregateData = repository.$data.get(aggregate.$id);
 
             aggregate.$changes.forEach((change: AggregateChange) => {
-                aggregateData[change.$field.$name] = change.$changed.value;
+                aggregateData[change.$field.$name] = change.$changed;
             });
         });
     }

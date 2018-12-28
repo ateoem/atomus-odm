@@ -21,6 +21,22 @@ class AggregateMapping {
         this.fields.set(field.$name, field);
     }
 
+    public get(key: string) {
+        return this.$fields.get(key);
+    }
+
+    public has(key: string) {
+        return this.$fields.has(key);
+    }
+
+    public set(key: string, value: Field) {
+        return this.$fields.set(key, value);
+    }
+
+    public size(): number {
+        return this.fields.size;
+    }
+
     public get $fields(): Map<string, Field> {
         return this.fields;
     }

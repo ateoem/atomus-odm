@@ -15,9 +15,9 @@ describe("AggregateManager", () => {
 
     const fields = [nameField, surnameField, idField];
     const fieldValues = [
-        new FieldValue(nameField, {value: "test"}),
-        new FieldValue(surnameField, {value: "ipsum"}),
-        new FieldValue(idField, {value: "9181ee1a-030b-40d3-9d2c-168db5c03c5e"}),
+        new FieldValue(nameField, "test"),
+        new FieldValue(surnameField, "ipsum"),
+        new FieldValue(idField, "9181ee1a-030b-40d3-9d2c-168db5c03c5e"),
     ];
     const aggregateMapping = new AggregateMapping("test_aggr", fields);
     const aggregate = new MappedAggregate(aggregateMapping, fieldValues);
