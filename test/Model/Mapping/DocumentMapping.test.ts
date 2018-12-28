@@ -1,8 +1,8 @@
-import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
+import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 
-describe("AggregateMapping", () => {
+describe("DocumentMapping", () => {
     it("should have setters/getters.", () => {
         const fields = [
             new Field("name", FieldType.string),

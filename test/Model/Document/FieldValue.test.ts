@@ -1,4 +1,4 @@
-import FieldValue from "../../../src/Model/Aggregate/FieldValue";
+import FieldValue from "../../../src/Model/Document/FieldValue";
 import Field from "../../../src/Model/Mapping/Field";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 

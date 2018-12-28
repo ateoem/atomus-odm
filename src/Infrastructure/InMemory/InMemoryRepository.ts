@@ -1,6 +1,6 @@
-import AggregateMapping from "../../Model/Mapping/AggregateMapping";
-import AggregateManager from "../../Model/ODM/AggregateManager";
-import AggregateRepository from "../../Model/ODM/AggregateRepository";
+import AggregateMapping from "../../Model/Mapping/DocumentMapping";
+import AggregateManager from "../../Model/ODM/DocumentManager";
+import AggregateRepository from "../../Model/ODM/DocumentRepository";
 
 class InMemoryRepository extends AggregateRepository {
     protected data: Map<string, object>;

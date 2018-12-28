@@ -1,10 +1,10 @@
-import AggregateChange from "../../Model/Aggregate/AggregateChange";
-import FieldValue from "../../Model/Aggregate/FieldValue";
-import AggregateMapping from "../../Model/Mapping/AggregateMapping";
-import AggregateManager from "../../Model/ODM/AggregateManager";
-import AggregateRepository from "../../Model/ODM/AggregateRepository";
-import IAggregateNormalizer from "../../Model/ODM/IAggregateNormalizer";
-import ManagedAggregate from "../../Model/ODM/ManagedAggregate";
+import AggregateChange from "../../Model/Document/DocumentChange";
+import FieldValue from "../../Model/Document/FieldValue";
+import AggregateMapping from "../../Model/Mapping/DocumentMapping";
+import AggregateManager from "../../Model/ODM/DocumentManager";
+import AggregateRepository from "../../Model/ODM/DocumentRepository";
+import IAggregateNormalizer from "../../Model/ODM/IDocumentNormalizer";
+import ManagedAggregate from "../../Model/Document/ManagedDocument";
 import InMemoryRepository from "./InMemoryRepository";
 
 class InMemoryManager extends AggregateManager {

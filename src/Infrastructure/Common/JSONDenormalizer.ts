@@ -1,9 +1,9 @@
-import FieldValue from "../../Model/Aggregate/FieldValue";
-import MappedAggregate from "../../Model/Aggregate/MappedAggregate";
+import FieldValue from "../../Model/Document/FieldValue";
+import MappedAggregate from "../../Model/Document/MappedDocument";
 import Field from "../../Model/Mapping/Field";
 import FieldType from "../../Model/Mapping/FieldType";
-import AggregateManager from "../../Model/ODM/AggregateManager";
-import IAggregateNormalizer from "../../Model/ODM/IAggregateNormalizer";
+import AggregateManager from "../../Model/ODM/DocumentManager";
+import IAggregateNormalizer from "../../Model/ODM/IDocumentNormalizer";
 
 class JSONDenormalizer implements IAggregateNormalizer {
     private manager: AggregateManager;

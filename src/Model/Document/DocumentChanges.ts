@@ -1,4 +1,4 @@
-import AggregateChange from "./AggregateChange";
+import AggregateChange from "./DocumentChange";
 
 class AggregateChanges {
     private changed: Map<string, AggregateChange>;

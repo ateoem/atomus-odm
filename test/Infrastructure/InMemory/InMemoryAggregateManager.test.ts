@@ -1,9 +1,9 @@
 import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
 import InMemoryManager from "../../../src/Infrastructure/InMemory/InMemoryManager";
-import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
+import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
 import FieldType from "../../../src/Model/Mapping/FieldType";
-import AggregateRepository from "../../../src/Model/ODM/AggregateRepository";
+import AggregateRepository from "../../../src/Model/ODM/DocumentRepository";
 
 describe("InMemoryAggregateManager", () => {
     const denormalizer = new JSONDenormalizer();

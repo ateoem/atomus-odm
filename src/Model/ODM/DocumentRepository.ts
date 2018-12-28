@@ -1,5 +1,5 @@
-import AggregateMapping from "../Mapping/AggregateMapping";
-import AggregateManager from "./AggregateManager";
+import AggregateMapping from "../Mapping/DocumentMapping";
+import AggregateManager from "./DocumentManager";
 
 abstract class AggregateRepository {
     protected aggregateMapping: AggregateMapping;

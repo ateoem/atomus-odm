@@ -1,10 +1,10 @@
-import FieldValue from "../../../src/Model/Aggregate/FieldValue";
-import MappedAggregate from "../../../src/Model/Aggregate/MappedAggregate";
-import AggregateMapping from "../../../src/Model/Mapping/AggregateMapping";
+import FieldValue from "../../../src/Model/Document/FieldValue";
+import MappedAggregate from "../../../src/Model/Document/MappedDocument";
+import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 
-describe("Aggregate", () => {
+describe("MappedDocument", () => {
     const fields = [
         new Field("id", FieldType.uuid),
         new Field("name", FieldType.string),

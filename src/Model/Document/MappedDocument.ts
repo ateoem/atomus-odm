@@ -1,13 +1,13 @@
 import {v1 as uuid} from "uuid";
-import AggregateMapping from "../Mapping/AggregateMapping";
+import AggregateMapping from "../Mapping/DocumentMapping";
 import Field from "../Mapping/Field";
 import FieldType from "../Mapping/FieldType";
-import Aggregate from "./Aggregate";
-import AggregateChange from "./AggregateChange";
-import AggregateChanges from "./AggregateChanges";
+import Document from "./Document";
+import AggregateChange from "./DocumentChange";
+import AggregateChanges from "./DocumentChanges";
 import FieldValue from "./FieldValue";
 
-class MappedAggregate extends Aggregate {
+class MappedAggregate extends Document {
 
     public get $id(): string {
         return this.fieldValues.get("id").$value;

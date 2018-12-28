@@ -1,9 +1,9 @@
-import Aggregate from "../Aggregate/Aggregate";
-import AggregateChange from "../Aggregate/AggregateChange";
-import AggregateChanges from "../Aggregate/AggregateChanges";
-import MappedAggregate from "../Aggregate/MappedAggregate";
+import Document from "./Document";
+import AggregateChange from "./DocumentChange";
+import AggregateChanges from "./DocumentChanges";
+import MappedAggregate from "./MappedDocument";
 
-class ManagedAggregate extends Aggregate {
+class ManagedAggregate extends Document {
     private aggregate: MappedAggregate;
     private changes: AggregateChanges;
 
@@ -19,7 +19,7 @@ class ManagedAggregate extends Aggregate {
 
     /**
      * Getter $aggregate
-     * @return {Aggregate}
+     * @return {Document}
      */
     public get $aggregate(): MappedAggregate {
         return this.aggregate;

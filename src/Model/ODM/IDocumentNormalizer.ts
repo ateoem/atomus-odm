@@ -1,6 +1,6 @@
-import MappedAggregate from "../Aggregate/MappedAggregate";
-import AggregateMapping from "../Mapping/AggregateMapping";
-import AggregateManager from "./AggregateManager";
+import MappedAggregate from "../Document/MappedDocument";
+import AggregateMapping from "../Mapping/DocumentMapping";
+import AggregateManager from "./DocumentManager";
 
 interface IAggregateNormalizer {
     normalize(aggregate: MappedAggregate): object;
