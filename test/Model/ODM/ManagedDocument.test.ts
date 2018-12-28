@@ -1,9 +1,9 @@
 import FieldValue from "../../../src/Model/Document/FieldValue";
+import ManagedAggregate from "../../../src/Model/Document/ManagedDocument";
 import MappedAggregate from "../../../src/Model/Document/MappedDocument";
 import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
 import FieldType from "../../../src/Model/Mapping/FieldType";
-import ManagedAggregate from "../../../src/Model/Document/ManagedDocument";
 
 describe("ManagedDocument", () => {
     it("should have getters/setters.", () => {

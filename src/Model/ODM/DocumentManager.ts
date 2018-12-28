@@ -1,9 +1,9 @@
 import AggregateChanges from "../Document/DocumentChanges";
+import ManagedAggregate from "../Document/ManagedDocument";
 import MappedAggregate from "../Document/MappedDocument";
 import AggregateMapping from "../Mapping/DocumentMapping";
 import AggregateRepository from "./DocumentRepository";
 import IAggregateNormalizer from "./IDocumentNormalizer";
-import ManagedAggregate from "../Document/ManagedDocument";
 
 abstract class AggregateManager {
     protected managedAggregates: Map<string, ManagedAggregate>;
