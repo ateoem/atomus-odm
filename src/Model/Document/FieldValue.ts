@@ -1,4 +1,5 @@
 import Field from "../Mapping/Field";
+import FieldType from "../Mapping/FieldType";
 import generateValueObject from "./ValueObject";
 import ValueObject from "./ValueObject/ValueObject";
 
@@ -17,6 +18,10 @@ class FieldValue {
 
     public get $field(): Field {
         return this.field;
+    }
+
+    public get $type(): FieldType {
+        return this.field.$type;
     }
 
     public get $value(): any {

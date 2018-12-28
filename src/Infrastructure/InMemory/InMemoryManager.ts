@@ -1,6 +1,6 @@
 import AggregateChange from "../../Model/Document/DocumentChange";
 import FieldValue from "../../Model/Document/FieldValue";
-import ManagedAggregate from "../../Model/Document/ManagedDocument";
+import ManagedAggregate from "../../Model/Document/RootDocument";
 import AggregateMapping from "../../Model/Mapping/DocumentMapping";
 import AggregateManager from "../../Model/ODM/DocumentManager";
 import AggregateRepository from "../../Model/ODM/DocumentRepository";

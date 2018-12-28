@@ -1,6 +1,6 @@
 import AggregateChanges from "../Document/DocumentChanges";
-import ManagedAggregate from "../Document/ManagedDocument";
 import MappedAggregate from "../Document/MappedDocument";
+import ManagedAggregate from "../Document/RootDocument";
 import AggregateMapping from "../Mapping/DocumentMapping";
 import AggregateRepository from "./DocumentRepository";
 import IAggregateNormalizer from "./IDocumentNormalizer";
@@ -27,7 +27,7 @@ abstract class AggregateManager {
         }
 
         const changes: AggregateChanges = originAggregate.$aggregate.computeChanges(dirtyAggregate);
-        originAggregate.updateChanges(changes);
+        // originAggregate.updateChanges(changes);
     }
 
     public manageAggregate(aggregate: ManagedAggregate) {

@@ -28,13 +28,4 @@ describe("MappedDocument", () => {
             const aggregate = new MappedAggregate(aggregateMapping, mockFieldValues);
         }).toThrowError();
     });
-
-    it("should compute changes.", () => {
-        const aggregate = new MappedAggregate(aggregateMapping);
-        const differentAggregate = new MappedAggregate(aggregateMapping);
-
-        const computedChanges = aggregate.computeChanges(differentAggregate);
-        expect(computedChanges.$changed.size).toEqual(1);
-        expect(computedChanges.$changed.has("id")).toBeTruthy();
-    });
 });

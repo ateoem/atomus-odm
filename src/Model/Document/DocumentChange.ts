@@ -2,7 +2,7 @@ import Field from "../Mapping/Field";
 import generateValueObject from "./ValueObject";
 import ValueObject from "./ValueObject/ValueObject";
 
-class AggregateChange {
+class DocumentChange {
     private field: Field;
     private old: ValueObject;
     private changed: ValueObject;
@@ -26,4 +26,4 @@ class AggregateChange {
     }
 }
 
-export default AggregateChange;
+export default DocumentChange;

@@ -1,7 +1,8 @@
 import {v1 as uuid} from "uuid";
 import Document from "./Document";
-import DocumentChange from "./DocumentChange";
+import AggregateChange from "./DocumentChange";
 import AggregateChanges from "./DocumentChanges";
+import DocumentChanges from "./DocumentChanges";
 import FieldValue from "./FieldValue";
 import MappedAggregate from "./MappedDocument";
 
@@ -19,28 +20,20 @@ class ManagedAggregate extends Document {
         return this.aggregate;
     }
 
-    /**
-     * Getter $changes
-     * @return {AggregateChanges}
-     */
-    public get $changes(): Map<string, DocumentChange> {
-        return this.changes.$changed;
+    public get $changes() {
+        return this.aggregate.$changes;
     }
+
+    public get $childChanges(): Map<string, DocumentChanges> {
+        return this.aggregate.$childChanges;
+    }
+
     private aggregate: MappedAggregate;
-    private changes: AggregateChanges;
 
     constructor($aggregate: MappedAggregate) {
         super();
         this.aggregate = $aggregate;
-        this.changes = new AggregateChanges();
         this.computeUuid();
-    }
-
-    /**
-     * @param {AggregateChanges} value
-     */
-    public updateChanges(value: AggregateChanges) {
-        this.changes = value;
     }
 
     public computeChanges(dirtyAggregate: ManagedAggregate): AggregateChanges {
