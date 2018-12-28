@@ -8,19 +8,22 @@ import Builder from "./Builder";
 
 describe("AggregateManager", () => {
     describe("Flat-Document (de)normalization", () => {
-        const nameField = new Field("name", FieldType.string);
-        const surnameField = new Field("surname", FieldType.string);
-        const idField = new Field("id", FieldType.uuid);
 
-        const fields = [nameField, surnameField, idField];
-        const fieldValues = [
-            new FieldValue(nameField, "test"),
-            new FieldValue(surnameField, "ipsum"),
-            new FieldValue(idField, "9181ee1a-030b-40d3-9d2c-168db5c03c5e"),
-        ];
-        const aggregateMapping = new AggregateMapping("test_aggr", fields);
-        const aggregate = new MappedAggregate(aggregateMapping, fieldValues);
-        const managedAggregate = new ManagedAggregate(aggregate);
+        const aggregateMapping = Builder
+        .mapping("test_aggr")
+        .addField(new Field("name", FieldType.string))
+        .addField(new Field("surname", FieldType.string))
+        .addField(new Field("id", FieldType.uuid))
+        .build();
+
+        const mappedAggregate = Builder
+        .mappedAggregate(aggregateMapping)
+        .addFieldValue("name", "test")
+        .addFieldValue("surname", "ipsum")
+        .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
+        .build();
+
+        const managedAggregate = new ManagedAggregate(mappedAggregate);
         const aggregateMock = Builder.aggregateManager();
         aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
         const denormalizer = aggregateMock.$normalizer;
@@ -47,7 +50,7 @@ describe("AggregateManager", () => {
                 surname: "ipsum",
             };
             const denormalizedAggregate: MappedAggregate = denormalizer.denormalize(json);
-            expect(denormalizedAggregate.computeChanges(aggregate).$changed.size).toEqual(0);
+            expect(denormalizedAggregate.computeChanges(mappedAggregate).$changed.size).toEqual(0);
         });
 
         it("should fail if document not found.", () => {
