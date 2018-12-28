@@ -9,7 +9,8 @@ describe("DocumentChanges", () => {
         const change = new AggregateChange(field, {value: 1}, {value: 2});
         const aggregateChanges = new AggregateChanges();
         aggregateChanges.setChange(change);
-        expect(aggregateChanges.$changed.size).toBe(1);
-        expect(aggregateChanges.$changed.get("test")).toEqual(change);
+        expect(aggregateChanges.size()).toBe(1);
+        expect(aggregateChanges.has("test")).toEqual(true);
+        expect(aggregateChanges.get("test")).toEqual(change);
     });
 });

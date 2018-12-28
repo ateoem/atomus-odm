@@ -29,10 +29,6 @@ class AggregateMapping {
         return this.$fields.has(key);
     }
 
-    public set(key: string, value: Field) {
-        return this.$fields.set(key, value);
-    }
-
     public size(): number {
         return this.fields.size;
     }

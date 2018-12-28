@@ -51,4 +51,17 @@ describe("AggregateManager", () => {
         const denormalizedAggregate: MappedAggregate = denormalizer.denormalize(json);
         expect(denormalizedAggregate.computeChanges(aggregate).$changed.size).toEqual(0);
     });
+
+    it("should fail if document not found.", () => {
+        expect(() => {
+            const json = {id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
+            [aggregateMock.$symbol]: {
+                aggregateName: "non_existent",
+            },
+            name: "test",
+            surname: "ipsum",
+        };
+            denormalizer.denormalize(json);
+        }).toThrowError();
+    });
 });

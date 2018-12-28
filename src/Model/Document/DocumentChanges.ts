@@ -1,6 +1,6 @@
 import AggregateChange from "./DocumentChange";
 
-class AggregateChanges {
+class DocumentChanges {
     private changed: Map<string, AggregateChange>;
 
     constructor() {
@@ -23,13 +23,9 @@ class AggregateChanges {
         return this.changed.has(key);
     }
 
-    public set(key: string, value: AggregateChange) {
-        return this.changed.set(key, value);
-    }
-
     public size(): number {
         return this.changed.size;
     }
 }
 
-export default AggregateChanges;
+export default DocumentChanges;
