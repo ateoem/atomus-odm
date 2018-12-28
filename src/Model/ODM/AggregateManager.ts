@@ -6,10 +6,10 @@ import IAggregateNormalizer from "./IAggregateNormalizer";
 import ManagedAggregate from "./ManagedAggregate";
 
 abstract class AggregateManager {
-    private managedAggregates: Map<string, ManagedAggregate>;
-    private normalizer: IAggregateNormalizer;
-    private mappings: Map<string, AggregateMapping>;
-    private metadataSymbol: symbol;
+    protected managedAggregates: Map<string, ManagedAggregate>;
+    protected normalizer: IAggregateNormalizer;
+    protected mappings: Map<string, AggregateMapping>;
+    protected metadataSymbol: symbol;
 
     constructor($normalizer: IAggregateNormalizer) {
         this.normalizer = $normalizer;
@@ -61,6 +61,10 @@ abstract class AggregateManager {
 
     public get $symbol(): symbol {
         return this.metadataSymbol;
+    }
+
+    public get $normalizer(): IAggregateNormalizer {
+        return this.normalizer;
     }
 
     public abstract flush();

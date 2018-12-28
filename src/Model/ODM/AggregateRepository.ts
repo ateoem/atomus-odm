@@ -10,10 +10,10 @@ abstract class AggregateRepository {
         this.aggregateManager = aggregateManager;
     }
 
-    public abstract findById(uuid: string): object;
-    public abstract findOneBy(uuid: string): object;
-    public abstract findBy(criterias: []): object[];
-    public abstract findAll(): object[];
+    public abstract findById(uuid: string): Promise<object>;
+    public abstract findOneBy(uuid: string): Promise<object>;
+    public abstract findBy(criterias: []): Promise<object[]>;
+    public abstract findAll(): Promise<object[]>;
 }
 
 export default AggregateRepository;

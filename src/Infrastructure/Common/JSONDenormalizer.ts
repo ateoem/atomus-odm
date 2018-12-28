@@ -1,5 +1,7 @@
 import FieldValue from "../../Model/Aggregate/FieldValue";
 import MappedAggregate from "../../Model/Aggregate/MappedAggregate";
+import Field from "../../Model/Mapping/Field";
+import FieldType from "../../Model/Mapping/FieldType";
 import AggregateManager from "../../Model/ODM/AggregateManager";
 import IAggregateNormalizer from "../../Model/ODM/IAggregateNormalizer";
 
@@ -26,7 +28,7 @@ class JSONDenormalizer implements IAggregateNormalizer {
             throw new Error("Mapping Aggregate not found!");
         }
         const fieldVals = Object.keys(tmp).map((key) => {
-            const gotField = mappingAggregate.$fields.get(key);
+            const gotField: Field = mappingAggregate.$fields.get(key);
             return new FieldValue(gotField, {value: tmp[key]});
         });
 

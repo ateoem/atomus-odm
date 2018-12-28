@@ -42,7 +42,7 @@ class MappedAggregate extends Aggregate {
     }
 
     public get $id(): string {
-        return this.fieldValues.get("id").$value;
+        return this.fieldValues.get("id").$value.value;
     }
 
     public get $name(): string {

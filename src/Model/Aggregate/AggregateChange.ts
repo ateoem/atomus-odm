@@ -15,11 +15,11 @@ class AggregateChange {
         return this.field;
     }
 
-    public get $old(): object {
+    public get $old(): any {
         return this.old;
     }
 
-    public get $changed(): object {
+    public get $changed(): any {
         return this.changed;
     }
 }
