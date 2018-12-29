@@ -2,14 +2,17 @@ import FieldValue from "../../../src/Model/Document/FieldValue";
 import MappedAggregate from "../../../src/Model/Document/MappedDocument";
 import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
+import ChildrenField from "../../../src/Model/Mapping/Fields/ChildrenField";
+import IdField from "../../../src/Model/Mapping/Fields/IdField";
+import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 import Builder from "../../Infrastructure/Common/Builder";
 
 describe("MappedDocument", () => {
     const fields = [
-        new Field("id", FieldType.uuid),
-        new Field("name", FieldType.string),
-        new Field("surname", FieldType.string),
+        new IdField("id"),
+        new StringField("name"),
+        new StringField("surname"),
     ];
     const exampleAggregateMapping = new AggregateMapping("test_mapping", fields);
 
@@ -25,7 +28,7 @@ describe("MappedDocument", () => {
 
     it("should guard against inconsistency.", () => {
         expect(() => {
-            const mockFieldValues = [new FieldValue(new Field("nam1e1", FieldType.string), {value: 1})];
+            const mockFieldValues = [new FieldValue(new StringField("nam1e1"), "1")];
             const aggregate = new MappedAggregate(exampleAggregateMapping, mockFieldValues);
         }).toThrowError();
     });
@@ -33,14 +36,14 @@ describe("MappedDocument", () => {
     it("should compute changes if there is different size in children.", () => {
         const childAggregateMapping = Builder
         .mapping("child_lorem")
-        .addField(new Field("child_text", FieldType.string))
+        .addField(new StringField("child_text"))
         .build();
 
         const aggregateMapping = Builder
     .mapping("root_lorem")
-    .addField(new Field("test", FieldType.string))
-    .addField(new Field("id", FieldType.uuid))
-    .addField(new Field("lorem_childs", FieldType.children, {mapping: childAggregateMapping}))
+    .addField(new StringField("test"))
+    .addField(new IdField("id"))
+    .addField(new ChildrenField("lorem_childs", childAggregateMapping))
     .build();
 
         const children = [];
@@ -82,14 +85,14 @@ describe("MappedDocument", () => {
     it("Should denormalize array of child", () => {
         const childAggregateMapping = Builder
         .mapping("child_lorem")
-        .addField(new Field("child_text", FieldType.string))
+        .addField(new StringField("child_text"))
         .build();
 
         const aggregateMapping = Builder
     .mapping("root_lorem")
-    .addField(new Field("test", FieldType.string))
-    .addField(new Field("id", FieldType.uuid))
-    .addField(new Field("lorem_childs", FieldType.children, {mapping: childAggregateMapping}))
+    .addField(new StringField("test"))
+    .addField(new IdField("id"))
+    .addField(new ChildrenField("lorem_childs", childAggregateMapping))
     .build();
 
         const children = [];

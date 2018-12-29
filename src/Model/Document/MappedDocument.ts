@@ -1,5 +1,7 @@
 import AggregateMapping from "../Mapping/DocumentMapping";
 import Field from "../Mapping/Field";
+import ChildField from "../Mapping/Fields/ChildField";
+import ChildrenField from "../Mapping/Fields/ChildrenField";
 import FieldType from "../Mapping/FieldType";
 import Document from "./Document";
 import DocumentChange from "./DocumentChange";
@@ -88,18 +90,18 @@ class MappedAggregate extends Document {
             if (dirtyFieldValue === undefined || !dirtyFieldValue.$field.isEqual(fieldValue.$field)) {
                 throw new Error("Field not found!");
             }
-            if (fieldValue.$type === FieldType.child) {
+            if (fieldValue.$field instanceof ChildField) {
                 const childValue: MappedAggregate = fieldValue.$value;
                 const dirtyChildValue: MappedAggregate = dirtyFieldValue.$value;
                 childValue.computeChanges(dirtyChildValue);
                 if (childValue.$changes.size !== 0) {
                     isAnythingChanged = true;
                 }
-            } else if (fieldValue.$type === FieldType.children) {
+            } else if (fieldValue.$field instanceof ChildrenField) {
                 const max = Math.max(fieldValue.$value.length, dirtyFieldValue.$value.length);
                 for (let i = 0; i < max; i++) {
                     if (!fieldValue.$value[i]) {
-                        fieldValue.$value[i] = new MappedAggregate(fieldValue.$field.$metadata.mapping);
+                        fieldValue.$value[i] = new MappedAggregate(fieldValue.$field.$mapping);
                         isAnythingChanged = true;
                     } else if (!dirtyFieldValue.$value[i]) {
                         fieldValue.$value[i].$changes.set("delete", true);
@@ -144,9 +146,9 @@ class MappedAggregate extends Document {
     private computeFieldValues() {
         this.$mapping.$fields.forEach((field: Field) => {
             if (!this.$fieldValues.has(field.$name)) {
-                if (field.$type === FieldType.child) {
+                if (field instanceof ChildField) {
                     this.fieldValues.set(field.$name,
-                        new FieldValue(field, new MappedAggregate(field.$metadata.mapping)),
+                        new FieldValue(field, new MappedAggregate(field.$mapping)),
                     );
                 } else {
                     this.fieldValues.set(field.$name, new FieldValue(field, ""));

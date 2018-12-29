@@ -2,8 +2,13 @@ import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalize
 import FieldValue from "../../../src/Model/Document/FieldValue";
 import MappedAggregate from "../../../src/Model/Document/MappedDocument";
 import ManagedAggregate from "../../../src/Model/Document/RootDocument";
+import UuidValue from "../../../src/Model/Document/ValueObject/UuidValue";
 import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
+import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
+import ChildrenField from "../../../src/Model/Mapping/Fields/ChildrenField";
+import IdField from "../../../src/Model/Mapping/Fields/IdField";
+import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 import Builder from "./Builder";
 
@@ -12,9 +17,9 @@ describe("AggregateManager", () => {
 
         const aggregateMapping = Builder
         .mapping("test_aggr")
-        .addField(new Field("name", FieldType.string))
-        .addField(new Field("surname", FieldType.string))
-        .addField(new Field("id", FieldType.uuid))
+        .addField(new StringField("name"))
+        .addField(new StringField("surname"))
+        .addField(new IdField("id"))
         .build();
 
         const mappedAggregate = Builder
@@ -72,14 +77,14 @@ describe("AggregateManager", () => {
     describe("Child-document (de)normalization", () => {
         const childAggregateMapping = Builder
         .mapping("child_lorem")
-        .addField(new Field("child_text", FieldType.string))
+        .addField(new StringField("child_text"))
         .build();
 
         const aggregateMapping = Builder
     .mapping("root_lorem")
-    .addField(new Field("test", FieldType.string))
-    .addField(new Field("id", FieldType.uuid))
-    .addField(new Field("lorem_child", FieldType.child, {mapping: childAggregateMapping}))
+    .addField(new StringField("test"))
+    .addField(new IdField("id"))
+    .addField(new ChildField("lorem_child", childAggregateMapping))
     .build();
 
         const childMappedAggregate = Builder
@@ -133,20 +138,20 @@ describe("AggregateManager", () => {
     describe("Multi-level-child-document (de)normalization", () => {
         const childChildAggregateMapping = Builder
         .mapping("child_child_lorem")
-        .addField(new Field("child_child_text", FieldType.string))
+        .addField(new StringField("child_child_text"))
         .build();
 
         const childAggregateMapping = Builder
         .mapping("child_lorem")
-        .addField(new Field("child_text", FieldType.string))
-        .addField(new Field("child_child", FieldType.child, {mapping: childChildAggregateMapping}))
+        .addField(new StringField("child_text"))
+        .addField(new ChildField("child_child", childChildAggregateMapping))
         .build();
 
         const aggregateMapping = Builder
     .mapping("root_lorem")
-    .addField(new Field("test", FieldType.string))
-    .addField(new Field("id", FieldType.uuid))
-    .addField(new Field("lorem_child", FieldType.child, {mapping: childAggregateMapping}))
+    .addField(new StringField("test"))
+    .addField(new IdField("id"))
+    .addField(new ChildField("lorem_child", childAggregateMapping))
     .build();
 
         const childChildMappedAggregate = Builder
@@ -215,14 +220,14 @@ describe("AggregateManager", () => {
         it("Should normalize array of child", () => {
             const childAggregateMapping = Builder
             .mapping("child_lorem")
-            .addField(new Field("child_text", FieldType.string))
+            .addField(new StringField("child_text"))
             .build();
 
             const aggregateMapping = Builder
         .mapping("root_lorem")
-        .addField(new Field("test", FieldType.string))
-        .addField(new Field("id", FieldType.uuid))
-        .addField(new Field("lorem_childs", FieldType.children, {mapping: childAggregateMapping}))
+        .addField(new StringField("test"))
+        .addField(new IdField("id"))
+        .addField(new ChildrenField("lorem_childs", childAggregateMapping))
         .build();
 
             const children = [];
@@ -264,14 +269,14 @@ describe("AggregateManager", () => {
         it("Should denormalize array of child", () => {
             const childAggregateMapping = Builder
             .mapping("child_lorem")
-            .addField(new Field("child_text", FieldType.string))
+            .addField(new StringField("child_text"))
             .build();
 
             const aggregateMapping = Builder
         .mapping("root_lorem")
-        .addField(new Field("test", FieldType.string))
-        .addField(new Field("id", FieldType.uuid))
-        .addField(new Field("lorem_childs", FieldType.children, {mapping: childAggregateMapping}))
+        .addField(new StringField("test"))
+        .addField(new IdField("id"))
+        .addField(new ChildrenField("lorem_childs", childAggregateMapping))
         .build();
 
             const children = [];

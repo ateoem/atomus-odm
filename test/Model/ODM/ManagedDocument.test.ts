@@ -4,14 +4,17 @@ import MappedAggregate from "../../../src/Model/Document/MappedDocument";
 import ManagedAggregate from "../../../src/Model/Document/RootDocument";
 import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
+import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
+import IdField from "../../../src/Model/Mapping/Fields/IdField";
+import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 import Builder from "../../Infrastructure/Common/Builder";
 
 describe("ManagedDocument", () => {
     it("should have getters/setters.", () => {
-        const nameField = new Field("name", FieldType.string);
-        const surnameField = new Field("surname", FieldType.string);
-        const idField = new Field("id", FieldType.uuid);
+        const nameField = new StringField("name");
+        const surnameField = new StringField("surname");
+        const idField = new IdField("id");
 
         const fields = [ nameField, surnameField, idField ];
         const fieldValues = [
@@ -27,9 +30,9 @@ describe("ManagedDocument", () => {
     });
 
     it("should compute changes.", () => {
-        const nameField = new Field("name", FieldType.string);
-        const surnameField = new Field("surname", FieldType.string);
-        const idField = new Field("id", FieldType.uuid);
+        const nameField = new StringField("name");
+        const surnameField = new StringField("surname");
+        const idField = new IdField("id");
 
         const fields = [ nameField, surnameField, idField ];
         const fieldValues = [
@@ -48,9 +51,9 @@ describe("ManagedDocument", () => {
     });
 
     it("should compute changes.", () => {
-        const nameField = new Field("name", FieldType.string);
-        const surnameField = new Field("surname", FieldType.string);
-        const idField = new Field("id", FieldType.uuid);
+        const nameField = new StringField("name");
+        const surnameField = new StringField("surname");
+        const idField = new IdField("id");
 
         const fields = [ nameField, surnameField, idField ];
         const fieldValues = [
@@ -69,12 +72,12 @@ describe("ManagedDocument", () => {
     });
 
     it("Should compute changes between child.", () => {
-        const loremField = new Field("lorem", FieldType.string);
-        const idField = new Field("id", FieldType.uuid);
+        const loremField = new StringField("lorem");
+        const idField = new IdField("id");
         const loremFieldValue = new FieldValue(loremField, "test");
 
         const childAggregateMapping = new AggregateMapping("lorem_child", [ loremField ]);
-        const childField = new Field("lorem_child", FieldType.child, {mapping: childAggregateMapping});
+        const childField = new ChildField("lorem_child", childAggregateMapping);
 
         const childFieldValue = new FieldValue(
             childField,
@@ -101,20 +104,20 @@ describe("ManagedDocument", () => {
     it("Should compute changes between multi-level-child.", () => {
         const childChildAggregateMapping = Builder
         .mapping("child_child_lorem")
-        .addField(new Field("child_child_text", FieldType.string))
+        .addField(new StringField("child_child_text"))
         .build();
 
         const childAggregateMapping = Builder
         .mapping("child_lorem")
-        .addField(new Field("child_text", FieldType.string))
-        .addField(new Field("child_child", FieldType.child, {mapping: childChildAggregateMapping}))
+        .addField(new StringField("child_text"))
+        .addField(new ChildField("child_child", childChildAggregateMapping))
         .build();
 
         const aggregateMapping = Builder
     .mapping("root_lorem")
-    .addField(new Field("test", FieldType.string))
-    .addField(new Field("id", FieldType.uuid))
-    .addField(new Field("lorem_child", FieldType.child, {mapping: childAggregateMapping}))
+    .addField(new StringField("test"))
+    .addField(new IdField("id"))
+    .addField(new ChildField("lorem_child", childAggregateMapping))
     .build();
 
         const childChildMappedAggregate = Builder

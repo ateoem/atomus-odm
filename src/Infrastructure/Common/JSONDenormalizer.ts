@@ -2,6 +2,8 @@ import FieldValue from "../../Model/Document/FieldValue";
 import MappedAggregate from "../../Model/Document/MappedDocument";
 import AggregateMapping from "../../Model/Mapping/DocumentMapping";
 import Field from "../../Model/Mapping/Field";
+import ChildField from "../../Model/Mapping/Fields/ChildField";
+import ChildrenField from "../../Model/Mapping/Fields/ChildrenField";
 import FieldType from "../../Model/Mapping/FieldType";
 import AggregateManager from "../../Model/ODM/DocumentManager";
 import IAggregateNormalizer from "../../Model/ODM/IDocumentNormalizer";
@@ -40,14 +42,14 @@ class JSONDenormalizer implements IAggregateNormalizer {
         }
         const fieldVals = Object.keys(tmp).map((key) => {
             const gotField: Field = mappingAggregate.$fields.get(key);
-            if (gotField.$type === FieldType.child) {
+            if (gotField instanceof ChildField) {
                 return new FieldValue(
                     gotField,
-                    this.denormalize(tmp[key], gotField.$metadata.mapping),
+                    this.denormalize(tmp[key], gotField.$mapping),
                 );
-            } else if (gotField.$type === FieldType.children) {
+            } else if (gotField instanceof ChildrenField) {
                 const mappedArray = tmp[key].map((obj) =>
-                    this.denormalize(obj, gotField.$metadata.mapping),
+                    this.denormalize(obj, gotField.$mapping),
                 );
                 return new FieldValue(gotField, mappedArray);
             } else {

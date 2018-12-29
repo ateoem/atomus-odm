@@ -1,14 +1,12 @@
 import FieldType from "./FieldType";
 
-class Field {
+abstract class Field {
     protected type: FieldType;
     protected name: string;
-    protected metadata: any;
 
-    constructor(name: string, type: FieldType, metadata: any = {}) {
+    constructor(name: string, type: FieldType) {
         this.type = type;
         this.name = name;
-        this.metadata = metadata;
     }
 
     get $type(): FieldType {
@@ -17,10 +15,6 @@ class Field {
 
     get $name(): string {
         return this.name;
-    }
-
-    get $metadata(): any {
-        return this.metadata;
     }
 
     public isEqual(comparedField: Field) {
