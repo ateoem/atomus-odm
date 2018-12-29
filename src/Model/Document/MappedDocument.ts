@@ -78,7 +78,6 @@ class MappedAggregate extends Document {
 
     public computeChanges(dirtyAggregate: MappedAggregate): boolean {
         if (dirtyAggregate.$fieldValues.size !== this.$fieldValues.size) {
-            const b = 1;
             throw new Error("Incosinstensy error.");
         }
         const changes = new AggregateChanges();

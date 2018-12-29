@@ -17,6 +17,7 @@ describe("InMemoryAggregateManager", () => {
     ];
     const aggregateMapping = new AggregateMapping("test", fields);
     manager.$mappings.set("test", aggregateMapping);
+
     it("should be able to create new sample document.", () => {
         const newDocument: any = manager.createNewAggregate("test");
         expect(newDocument.id).not.toBeNull();
