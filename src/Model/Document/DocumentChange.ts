@@ -5,12 +5,12 @@ import ValueObject from "./ValueObject/ValueObject";
 class DocumentChange {
     private field: Field;
     private old: ValueObject;
-    private changed: ValueObject;
+    private updated: ValueObject;
 
-    constructor(field: Field, old: any, changed: any) {
+    constructor(field: Field, old: any, updated: any) {
         this.field = field;
         this.old = generateValueObject(field, old);
-        this.changed = generateValueObject(field, changed);
+        this.updated = generateValueObject(field, updated);
     }
 
     public get $field(): Field {
@@ -21,8 +21,8 @@ class DocumentChange {
         return this.old.$value;
     }
 
-    public get $changed(): any {
-        return this.changed.$value;
+    public get $updated(): any {
+        return this.updated.$value;
     }
 }
 

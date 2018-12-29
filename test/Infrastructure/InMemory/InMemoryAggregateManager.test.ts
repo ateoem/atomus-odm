@@ -1,29 +1,29 @@
 import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
 import InMemoryManager from "../../../src/Infrastructure/InMemory/InMemoryManager";
-import AggregateManager from "../../../src/Model/ODM/DocumentManager";
-import AggregateRepository from "../../../src/Model/ODM/DocumentRepository";
+import DocumentManager from "../../../src/Model/ODM/DocumentManager";
+import DocumentRepository from "../../../src/Model/ODM/DocumentRepository";
 import { AuthorMapping, CommentMapping, PostMapping, UserDocument } from "../../Common/Models";
 
-describe("InMemoryAggregateManager", () => {
+describe("InMemoryDocumentManager", () => {
     describe("Flat-Document", () => {
         const denormalizer = new JSONDenormalizer();
         const manager = new InMemoryManager(denormalizer);
-        denormalizer.setAggregateManager(manager);
+        denormalizer.setDocumentManager(manager);
         manager.manageMapping(UserDocument);
 
         it("should be able to create new sample document.", () => {
-            const newDocument: any = manager.createNewAggregate("user");
+            const newDocument: any = manager.createNewDocument("user");
             expect(newDocument.id).not.toBeNull();
         });
 
         it("should be able to retrieve document repository.", () => {
-            const repository: AggregateRepository = manager.getRepository("user");
-            expect(repository).toBeInstanceOf(AggregateRepository);
+            const repository: DocumentRepository = manager.getRepository("user");
+            expect(repository).toBeInstanceOf(DocumentRepository);
         });
 
         it("should be able to persist and flush document properly.", async () => {
-            const repository: AggregateRepository = manager.getRepository("user");
-            const newDocument: any = manager.createNewAggregate("user");
+            const repository: DocumentRepository = manager.getRepository("user");
+            const newDocument: any = manager.createNewDocument("user");
             manager.persist(newDocument);
             manager.flush();
             const retrievedDocument: any = await repository.findById(newDocument.id);
@@ -34,8 +34,8 @@ describe("InMemoryAggregateManager", () => {
         });
 
         it("should be able to update and flush document properly.", async () => {
-            const repository: AggregateRepository = manager.getRepository("user");
-            const newDocument: any = manager.createNewAggregate("user");
+            const repository: DocumentRepository = manager.getRepository("user");
+            const newDocument: any = manager.createNewDocument("user");
 
             manager.persist(newDocument);
             manager.flush();
@@ -56,22 +56,22 @@ describe("InMemoryAggregateManager", () => {
     describe("Child-document", () => {
 
         const normalizer = new JSONDenormalizer();
-        let manager: AggregateManager;
+        let manager: DocumentManager;
 
         const newComment = () =>
             ({content: "random", author: {name: "test", surname: Math.random().toString()}});
 
         beforeEach(() => {
             manager = new InMemoryManager(normalizer);
-            normalizer.setAggregateManager(manager);
-            normalizer.setAggregateManager(manager);
+            normalizer.setDocumentManager(manager);
+            normalizer.setDocumentManager(manager);
             manager.manageMapping(AuthorMapping);
             manager.manageMapping(CommentMapping);
             manager.manageMapping(PostMapping);
         });
 
         it("should create empty blogpost element.", () => {
-            const post: any = manager.createNewAggregate("blogpost");
+            const post: any = manager.createNewDocument("blogpost");
             expect(post.title).toBe("");
             expect(post.comments).toEqual([]);
             expect(post.author.name).toEqual("");
@@ -79,13 +79,13 @@ describe("InMemoryAggregateManager", () => {
         });
 
         it("should be able to retrieve blogpost repository.", () => {
-            const repository: AggregateRepository = manager.getRepository("blogpost");
-            expect(repository).toBeInstanceOf(AggregateRepository);
+            const repository: DocumentRepository = manager.getRepository("blogpost");
+            expect(repository).toBeInstanceOf(DocumentRepository);
         });
 
         it("should be able to save blogpost.", async () => {
             const repository = manager.getRepository("blogpost");
-            const post: any = manager.createNewAggregate("blogpost");
+            const post: any = manager.createNewDocument("blogpost");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -98,7 +98,7 @@ describe("InMemoryAggregateManager", () => {
 
         it("should be able to save blogpost with comments <happypath>.", async () => {
             const repository = manager.getRepository("blogpost");
-            const post: any = manager.createNewAggregate("blogpost");
+            const post: any = manager.createNewDocument("blogpost");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -140,9 +140,9 @@ describe("InMemoryAggregateManager", () => {
         it("should be able to retrieve blogpost by title.", async () => {
             const repository = manager.getRepository("blogpost");
 
-            const blogpost1: any = manager.createNewAggregate("blogpost");
-            const blogpost2: any = manager.createNewAggregate("blogpost");
-            const blogpost3: any = manager.createNewAggregate("blogpost");
+            const blogpost1: any = manager.createNewDocument("blogpost");
+            const blogpost2: any = manager.createNewDocument("blogpost");
+            const blogpost3: any = manager.createNewDocument("blogpost");
             blogpost1.title = "lorem";
             blogpost2.title = "ipsum";
             blogpost3.title = "dolor";

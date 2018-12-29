@@ -1,13 +1,13 @@
-import AggregateMapping from "../Mapping/DocumentMapping";
-import AggregateManager from "./DocumentManager";
+import DocumentMapping from "../Mapping/DocumentMapping";
+import DocumentManager from "./DocumentManager";
 
-abstract class AggregateRepository {
-    protected aggregateMapping: AggregateMapping;
-    protected aggregateManager: AggregateManager;
+abstract class DocumentRepository {
+    protected mapping: DocumentMapping;
+    protected manager: DocumentManager;
 
-    constructor(aggregateMapping: AggregateMapping, aggregateManager: AggregateManager) {
-        this.aggregateMapping = aggregateMapping;
-        this.aggregateManager = aggregateManager;
+    constructor(mapping: DocumentMapping, manager: DocumentManager) {
+        this.mapping = mapping;
+        this.manager = manager;
     }
 
     public abstract findById(uuid: string): Promise<object>;
@@ -16,4 +16,4 @@ abstract class AggregateRepository {
     public abstract findAll(): Promise<object[]>;
 }
 
-export default AggregateRepository;
+export default DocumentRepository;

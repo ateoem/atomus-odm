@@ -1,14 +1,14 @@
 import * as PropertyPath from "get-value";
-import ManagedAggregate from "../../Model/Document/RootDocument";
-import AggregateMapping from "../../Model/Mapping/DocumentMapping";
-import AggregateManager from "../../Model/ODM/DocumentManager";
-import AggregateRepository from "../../Model/ODM/DocumentRepository";
+import ManagedDocument from "../../Model/Document/RootDocument";
+import DocumentMapping from "../../Model/Mapping/DocumentMapping";
+import DocumentManager from "../../Model/ODM/DocumentManager";
+import DocumentRepository from "../../Model/ODM/DocumentRepository";
 
-class InMemoryRepository extends AggregateRepository {
+class InMemoryRepository extends DocumentRepository {
     protected data: Map<string, object>;
 
-    constructor(aggregateMapping: AggregateMapping, aggregateManager: AggregateManager) {
-        super(aggregateMapping, aggregateManager);
+    constructor(mapping: DocumentMapping, manager: DocumentManager) {
+        super(mapping, manager);
         this.data = new Map();
     }
 
@@ -18,15 +18,15 @@ class InMemoryRepository extends AggregateRepository {
 
     public findById(uuid: string): Promise<object> {
         const json = this.data.get(uuid);
-        this.aggregateManager.manageAggregate(
-            new ManagedAggregate(this.aggregateManager.$normalizer.denormalize(json)));
+        this.manager.manageDocument(
+            new ManagedDocument(this.manager.$normalizer.denormalize(json)));
         return Promise.resolve(json);
     }
 
     public findOneBy(uuid: string): Promise<object> {
         const json = this.data.get(uuid);
-        this.aggregateManager.manageAggregate(
-            new ManagedAggregate(this.aggregateManager.$normalizer.denormalize(json)));
+        this.manager.manageDocument(
+            new ManagedDocument(this.manager.$normalizer.denormalize(json)));
         return Promise.resolve(json);
     }
 

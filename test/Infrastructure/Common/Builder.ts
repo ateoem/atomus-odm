@@ -1,10 +1,10 @@
 import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
 import FieldValue from "../../../src/Model/Document/FieldValue";
-import MappedAggregate from "../../../src/Model/Document/MappedDocument";
-import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
+import MappedDocument from "../../../src/Model/Document/MappedDocument";
+import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
-import AggregateManager from "../../../src/Model/ODM/DocumentManager";
-import AggregateManagerMock from "./AggregateManagerMock";
+import DocumentManager from "../../../src/Model/ODM/DocumentManager";
+import DocumentManagerMock from "./DocumentManagerMock";
 
 class MappingBuilder {
     private fields: Field[];
@@ -21,24 +21,24 @@ class MappingBuilder {
     }
 
     public build() {
-        return new AggregateMapping(this.name, this.fields);
+        return new DocumentMapping(this.name, this.fields);
     }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class MappedAggregateBuilder {
-    private aggregateMapping: AggregateMapping;
+class MappedDocumentBuilder {
+    private mapping: DocumentMapping;
     private fieldValues: FieldValue[];
 
-    constructor(aggregateMapping: AggregateMapping) {
-        this.aggregateMapping = aggregateMapping;
+    constructor(mapping: DocumentMapping) {
+        this.mapping = mapping;
         this.fieldValues = [];
     }
 
     public addFieldValue(name: string, value: any) {
-        const field = this.aggregateMapping.get(name);
+        const field = this.mapping.get(name);
         if (!field) {
-            throw new Error("Field not found!" + this.aggregateMapping.$name);
+            throw new Error("Field not found!" + this.mapping.$name);
         }
         this.fieldValues.push(new FieldValue(field, value));
 
@@ -46,7 +46,7 @@ class MappedAggregateBuilder {
     }
 
     public build() {
-        return new MappedAggregate(this.aggregateMapping, this.fieldValues);
+        return new MappedDocument(this.mapping, this.fieldValues);
     }
 }
 
@@ -56,15 +56,15 @@ class Builder {
         return new MappingBuilder(name);
     }
 
-    public static mappedAggregate(aggregateMapping: AggregateMapping): MappedAggregateBuilder {
-        return new MappedAggregateBuilder(aggregateMapping);
+    public static mappedDocument(mapping: DocumentMapping): MappedDocumentBuilder {
+        return new MappedDocumentBuilder(mapping);
     }
 
-    public static aggregateManager(): AggregateManager {
+    public static documentManager(): DocumentManager {
         const denormalizer = new JSONDenormalizer();
-        const aggregateMock = new AggregateManagerMock(denormalizer);
-        denormalizer.setAggregateManager(aggregateMock);
-        return aggregateMock;
+        const managerMock = new DocumentManagerMock(denormalizer);
+        denormalizer.setDocumentManager(managerMock);
+        return managerMock;
     }
 }
 

@@ -1,8 +1,8 @@
 import DocumentChanges from "../../../src/Model/Document/DocumentChanges";
 import FieldValue from "../../../src/Model/Document/FieldValue";
-import MappedAggregate from "../../../src/Model/Document/MappedDocument";
-import ManagedAggregate from "../../../src/Model/Document/RootDocument";
-import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
+import MappedDocument from "../../../src/Model/Document/MappedDocument";
+import ManagedDocument from "../../../src/Model/Document/RootDocument";
+import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
 import Field from "../../../src/Model/Mapping/Field";
 import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
@@ -22,11 +22,11 @@ describe("ManagedDocument", () => {
             new FieldValue(surnameField, { value: "ipsum" }),
             new FieldValue(idField, { value: "9181ee1a-030b-40d3-9d2c-168db5c03c5e" }),
         ];
-        const aggregateMapping = new AggregateMapping("test_aggr", fields);
-        const aggregate = new MappedAggregate(aggregateMapping, fieldValues);
-        const managedAggregate = new ManagedAggregate(aggregate);
-        expect(managedAggregate.$aggregate).toBe(aggregate);
-        expect(managedAggregate.$changes).toBeInstanceOf(Map);
+        const documentMapping = new DocumentMapping("test_aggr", fields);
+        const document = new MappedDocument(documentMapping, fieldValues);
+        const managedDocument = new ManagedDocument(document);
+        expect(managedDocument.$document).toBe(document);
+        expect(managedDocument.$changes).toBeInstanceOf(Map);
     });
 
     it("should compute changes.", () => {
@@ -40,14 +40,14 @@ describe("ManagedDocument", () => {
             new FieldValue(surnameField, { value: "ipsum" }),
         ];
 
-        const aggregateMapping = new AggregateMapping("test_aggr", fields);
+        const documentMapping = new DocumentMapping("test_aggr", fields);
 
-        const managedAggregate = new ManagedAggregate(new MappedAggregate(aggregateMapping, fieldValues));
-        const differentAggregate = new ManagedAggregate(new MappedAggregate(aggregateMapping, fieldValues));
+        const managedDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
+        const differentDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
 
-        const computedChanges = differentAggregate.computeChanges(managedAggregate);
-        expect(differentAggregate.$changes.size).toEqual(1);
-        expect(differentAggregate.$changes.has("id")).toBeTruthy();
+        const computedChanges = differentDocument.computeChanges(managedDocument);
+        expect(differentDocument.$changes.size).toEqual(1);
+        expect(differentDocument.$changes.has("id")).toBeTruthy();
     });
 
     it("should compute changes.", () => {
@@ -61,14 +61,14 @@ describe("ManagedDocument", () => {
             new FieldValue(surnameField, { value: "ipsum" }),
         ];
 
-        const aggregateMapping = new AggregateMapping("test_aggr", fields);
+        const documentMapping = new DocumentMapping("test_aggr", fields);
 
-        const managedAggregate = new ManagedAggregate(new MappedAggregate(aggregateMapping, fieldValues));
-        const differentAggregate = new ManagedAggregate(new MappedAggregate(aggregateMapping, fieldValues));
+        const managedDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
+        const differentDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
 
-        const computedChanges = differentAggregate.computeChanges(managedAggregate);
-        expect(differentAggregate.$changes.size).toEqual(1);
-        expect(differentAggregate.$changes.has("id")).toBeTruthy();
+        const computedChanges = differentDocument.computeChanges(managedDocument);
+        expect(differentDocument.$changes.size).toEqual(1);
+        expect(differentDocument.$changes.has("id")).toBeTruthy();
     });
 
     it("Should compute changes between child.", () => {
@@ -76,90 +76,90 @@ describe("ManagedDocument", () => {
         const idField = new IdField("id");
         const loremFieldValue = new FieldValue(loremField, "test");
 
-        const childAggregateMapping = new AggregateMapping("lorem_child", [ loremField ]);
-        const childField = new ChildField("lorem_child", childAggregateMapping);
+        const childDocumentMapping = new DocumentMapping("lorem_child", [ loremField ]);
+        const childField = new ChildField("lorem_child", childDocumentMapping);
 
         const childFieldValue = new FieldValue(
             childField,
-            new MappedAggregate(childAggregateMapping, [loremFieldValue],
+            new MappedDocument(childDocumentMapping, [loremFieldValue],
                 ),
             );
 
-        const rootAggregateMapping = new AggregateMapping("lorem_root", [ childField, loremField, idField ]);
-        const childAggregate = new MappedAggregate(childAggregateMapping, [ loremFieldValue ]);
+        const rootDocumentMapping = new DocumentMapping("lorem_root", [ childField, loremField, idField ]);
+        const childDocument = new MappedDocument(childDocumentMapping, [ loremFieldValue ]);
 
-        const firstRootAggregate = new ManagedAggregate(new MappedAggregate(rootAggregateMapping, [loremFieldValue]));
-        const secondRootAggregate = new ManagedAggregate(
-            new MappedAggregate(rootAggregateMapping, [ loremFieldValue, childFieldValue ]),
+        const firstRootDocument = new ManagedDocument(new MappedDocument(rootDocumentMapping, [loremFieldValue]));
+        const secondRootDocument = new ManagedDocument(
+            new MappedDocument(rootDocumentMapping, [ loremFieldValue, childFieldValue ]),
         );
 
-        firstRootAggregate.computeChanges(secondRootAggregate);
-        const childChanges = firstRootAggregate.getChild("lorem_child").$changes;
+        firstRootDocument.computeChanges(secondRootDocument);
+        const childChanges = firstRootDocument.getChild("lorem_child").$changes;
 
         expect(childChanges.size).toEqual(1);
         expect(childChanges.get("lorem").$old).toEqual("");
-        expect(childChanges.get("lorem").$changed).toEqual("test");
+        expect(childChanges.get("lorem").$updated).toEqual("test");
     });
 
     it("Should compute changes between multi-level-child.", () => {
-        const childChildAggregateMapping = Builder
+        const childChildDocumentMapping = Builder
         .mapping("child_child_lorem")
         .addField(new StringField("child_child_text"))
         .build();
 
-        const childAggregateMapping = Builder
+        const childDocumentMapping = Builder
         .mapping("child_lorem")
         .addField(new StringField("child_text"))
-        .addField(new ChildField("child_child", childChildAggregateMapping))
+        .addField(new ChildField("child_child", childChildDocumentMapping))
         .build();
 
-        const aggregateMapping = Builder
+        const documentMapping = Builder
     .mapping("root_lorem")
     .addField(new StringField("test"))
     .addField(new IdField("id"))
-    .addField(new ChildField("lorem_child", childAggregateMapping))
+    .addField(new ChildField("lorem_child", childDocumentMapping))
     .build();
 
-        const childChildMappedAggregate = Builder
-    .mappedAggregate(childChildAggregateMapping)
+        const childChildMappedDocument = Builder
+    .mappedDocument(childChildDocumentMapping)
     .addFieldValue("child_child_text", "child_child_lorem_ipsum")
     .build();
 
-        const secondChildChildMappedAggregate = Builder
-    .mappedAggregate(childChildAggregateMapping)
+        const secondChildChildMappedDocument = Builder
+    .mappedDocument(childChildDocumentMapping)
     .addFieldValue("child_child_text", "child_child_lorem_ipsum2")
     .build();
 
-        const childMappedAggregate = Builder
-    .mappedAggregate(childAggregateMapping)
+        const childMappedDocument = Builder
+    .mappedDocument(childDocumentMapping)
     .addFieldValue("child_text", "child_lorem_ipsum")
-    .addFieldValue("child_child", childChildMappedAggregate)
+    .addFieldValue("child_child", childChildMappedDocument)
     .build();
 
-        const secondChildMappedAggregate = Builder
-    .mappedAggregate(childAggregateMapping)
+        const secondChildMappedDocument = Builder
+    .mappedDocument(childDocumentMapping)
     .addFieldValue("child_text", "child_lorem_ipsum")
-    .addFieldValue("child_child", secondChildChildMappedAggregate)
+    .addFieldValue("child_child", secondChildChildMappedDocument)
     .build();
 
-        const mappedAggregate = Builder
-    .mappedAggregate(aggregateMapping)
+        const mappedDocument = Builder
+    .mappedDocument(documentMapping)
     .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
     .addFieldValue("test", "lorem")
-    .addFieldValue("lorem_child", childMappedAggregate)
+    .addFieldValue("lorem_child", childMappedDocument)
     .build();
 
-        const secondMappedAggregate = Builder
-    .mappedAggregate(aggregateMapping)
+        const secondMappedDocument = Builder
+    .mappedDocument(documentMapping)
     .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
     .addFieldValue("test", "lorem")
-    .addFieldValue("lorem_child", secondChildMappedAggregate)
+    .addFieldValue("lorem_child", secondChildMappedDocument)
     .build();
 
-        expect(mappedAggregate.computeChanges(secondMappedAggregate)).toBeFalsy();
-        const childChildChanges = mappedAggregate.getChild("lorem_child").getChild("child_child").$changes;
+        expect(mappedDocument.computeChanges(secondMappedDocument)).toBeFalsy();
+        const childChildChanges = mappedDocument.getChild("lorem_child").getChild("child_child").$changes;
         expect(childChildChanges.size).toEqual(1);
         expect(childChildChanges.get("child_child_text").$old).toEqual("child_child_lorem_ipsum");
-        expect(childChildChanges.get("child_child_text").$changed).toEqual("child_child_lorem_ipsum2");
+        expect(childChildChanges.get("child_child_text").$updated).toEqual("child_child_lorem_ipsum2");
     });
 });

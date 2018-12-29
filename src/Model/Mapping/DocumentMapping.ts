@@ -1,6 +1,6 @@
 import Field from "./Field";
 
-class AggregateMapping {
+class DocumentMapping {
     private fields: Map<string, Field>;
     private name: string;
 
@@ -52,4 +52,4 @@ class AggregateMapping {
     }
 }
 
-export default AggregateMapping;
+export default DocumentMapping;

@@ -1,65 +1,63 @@
-import AggregateChanges from "../Document/DocumentChanges";
-import MappedAggregate from "../Document/MappedDocument";
-import ManagedAggregate from "../Document/RootDocument";
-import AggregateMapping from "../Mapping/DocumentMapping";
-import AggregateRepository from "./DocumentRepository";
-import IAggregateNormalizer from "./IDocumentNormalizer";
+import MappedDocument from "../Document/MappedDocument";
+import ManagedDocument from "../Document/RootDocument";
+import DocumentMapping from "../Mapping/DocumentMapping";
+import DocumentRepository from "./DocumentRepository";
+import IDocumentNormalizer from "./IDocumentNormalizer";
 
-abstract class AggregateManager {
-    protected managedAggregates: Map<string, ManagedAggregate>;
-    protected normalizer: IAggregateNormalizer;
-    protected mappings: Map<string, AggregateMapping>;
+abstract class DocumentManager {
+    protected managedDocuments: Map<string, ManagedDocument>;
+    protected normalizer: IDocumentNormalizer;
+    protected mappings: Map<string, DocumentMapping>;
     protected metadataSymbol: symbol;
 
-    constructor($normalizer: IAggregateNormalizer) {
+    constructor($normalizer: IDocumentNormalizer) {
         this.normalizer = $normalizer;
         this.metadataSymbol = Symbol();
         this.mappings = new Map();
-        this.managedAggregates = new Map();
+        this.managedDocuments = new Map();
     }
 
     public persist(payload: object) {
-        const dirtyAggregate: MappedAggregate = this.normalizer.denormalize(payload);
-        const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.$id);
+        const dirtyDocument: MappedDocument = this.normalizer.denormalize(payload);
+        const originDocument: ManagedDocument = this.managedDocuments.get(dirtyDocument.$id);
 
-        if (!originAggregate) {
-            throw new Error("Aggregate not found!");
+        if (!originDocument) {
+            throw new Error("Document not found!");
         }
 
-        originAggregate.computeChanges(dirtyAggregate);
-        // originAggregate.updateChanges(changes);
+        originDocument.computeChanges(dirtyDocument);
     }
 
-    public manageMapping(mapping: AggregateMapping) {
+    public manageMapping(mapping: DocumentMapping) {
         if (this.mappings.has(mapping.$name)) {
             throw new Error("Mapping in system!");
         }
         this.mappings.set(mapping.$name, mapping);
     }
 
-    public manageAggregate(aggregate: ManagedAggregate) {
-        this.managedAggregates.set(aggregate.$id, aggregate);
+    public manageDocument(document: ManagedDocument) {
+        this.managedDocuments.set(document.$id, document);
     }
 
-    public createNewAggregate(mapping: AggregateMapping|string): object {
-        let newAggregate: ManagedAggregate;
-        if (mapping instanceof AggregateMapping) {
-            newAggregate = new ManagedAggregate(new MappedAggregate(mapping));
+    public createNewDocument(mapping: DocumentMapping|string): object {
+        let newDocument: ManagedDocument;
+        if (mapping instanceof DocumentMapping) {
+            newDocument = new ManagedDocument(new MappedDocument(mapping));
         } else {
             const retrievedMapping = this.mappings.get(mapping);
             if (!retrievedMapping) {
                 throw new Error("Mapping not found!");
             }
-            newAggregate = new ManagedAggregate(new MappedAggregate(retrievedMapping));
+            newDocument = new ManagedDocument(new MappedDocument(retrievedMapping));
         }
 
-        this.manageAggregate(newAggregate);
-        return this.normalizer.normalize(newAggregate.$aggregate);
+        this.manageDocument(newDocument);
+        return this.normalizer.normalize(newDocument.$document);
     }
 
-    public abstract getRepository(mapping: AggregateMapping|string): AggregateRepository;
+    public abstract getRepository(mapping: DocumentMapping|string): DocumentRepository;
 
-    public get $mappings(): Map<string, AggregateMapping> {
+    public get $mappings(): Map<string, DocumentMapping> {
         return this.mappings;
     }
 
@@ -67,11 +65,11 @@ abstract class AggregateManager {
         return this.metadataSymbol;
     }
 
-    public get $normalizer(): IAggregateNormalizer {
+    public get $normalizer(): IDocumentNormalizer {
         return this.normalizer;
     }
 
     public abstract flush();
 }
 
-export default AggregateManager;
+export default DocumentManager;

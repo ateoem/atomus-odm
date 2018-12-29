@@ -1,67 +1,60 @@
 import {v1 as uuid} from "uuid";
 import Document from "./Document";
-import AggregateChange from "./DocumentChange";
-import AggregateChanges from "./DocumentChanges";
-import DocumentChanges from "./DocumentChanges";
 import FieldValue from "./FieldValue";
-import MappedAggregate from "./MappedDocument";
+import MappedDocument from "./MappedDocument";
 
-class ManagedAggregate extends Document {
+class ManagedDocument extends Document {
 
     public get $id() {
-        return this.aggregate.$id;
+        return this.document.$id;
     }
 
-    /**
-     * Getter $aggregate
-     * @return {Document}
-     */
-    public get $aggregate(): MappedAggregate {
-        return this.aggregate;
+    public get $document(): MappedDocument {
+        return this.document;
     }
 
     public get $changes() {
-        return this.aggregate.$changes;
+        return this.document.$changes;
     }
 
     public get $isDirty() {
         return this.isDirty;
     }
 
-    private aggregate: MappedAggregate;
+    private document: MappedDocument;
     private isDirty: boolean;
 
-    constructor($aggregate: MappedAggregate) {
+    constructor($document: MappedDocument) {
         super();
-        this.aggregate = $aggregate;
+        this.document = $document;
         this.computeUuid();
         this.isDirty = false;
     }
 
-    public getChild(name: string): MappedAggregate {
-        return this.aggregate.getChild(name);
+    public getChild(name: string): MappedDocument {
+        return this.document.getChild(name);
     }
 
-    public computeChanges(dirtyAggregate: ManagedAggregate|MappedAggregate): boolean {
-        const aggregateToCompare = (dirtyAggregate instanceof MappedAggregate)
-            ? dirtyAggregate : dirtyAggregate.$aggregate;
-        const isDirty = this.aggregate.computeChanges(aggregateToCompare);
+    public computeChanges(dirtyDocument: ManagedDocument|MappedDocument): boolean {
+        const documentToCompare = (dirtyDocument instanceof MappedDocument)
+            ? dirtyDocument : dirtyDocument.$document;
+        const isDirty = this.document.computeChanges(documentToCompare);
         this.isDirty = isDirty;
         return isDirty;
     }
 
     private computeUuid() {
-        const uuidField = this.aggregate.$mapping.$fields.get("id");
+        const uuidField = this.document.$mapping.$fields.get("id");
         if (!uuidField) {
             throw new Error("Id not present!");
         }
-        const uuidFieldValue = this.aggregate.$fieldValues.get("id");
+        const uuidFieldValue = this.document.$fieldValues.get("id");
         if (uuidFieldValue.$value !== "") {
             return;
         }
         const uuidFieldValueTmp = new FieldValue(uuidField, uuid());
-        this.aggregate.$fieldValues.set("id", uuidFieldValueTmp);
+        this.document.$fieldValues.set("id", uuidFieldValueTmp);
     }
 }
 
-export default ManagedAggregate;
+export default ManagedDocument;

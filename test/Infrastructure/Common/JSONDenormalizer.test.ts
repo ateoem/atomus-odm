@@ -1,69 +1,63 @@
-import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
-import FieldValue from "../../../src/Model/Document/FieldValue";
-import MappedAggregate from "../../../src/Model/Document/MappedDocument";
-import ManagedAggregate from "../../../src/Model/Document/RootDocument";
-import UuidValue from "../../../src/Model/Document/ValueObject/UuidValue";
-import AggregateMapping from "../../../src/Model/Mapping/DocumentMapping";
-import Field from "../../../src/Model/Mapping/Field";
+import MappedDocument from "../../../src/Model/Document/MappedDocument";
+import RootDocument from "../../../src/Model/Document/RootDocument";
 import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
 import ChildrenField from "../../../src/Model/Mapping/Fields/ChildrenField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
 import StringField from "../../../src/Model/Mapping/Fields/StringField";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import Builder from "./Builder";
 
-describe("AggregateManager", () => {
+describe("JSONDenormalizer", () => {
     describe("Flat-Document (de)normalization", () => {
 
-        const aggregateMapping = Builder
+        const mapping = Builder
         .mapping("test_aggr")
         .addField(new StringField("name"))
         .addField(new StringField("surname"))
         .addField(new IdField("id"))
         .build();
 
-        const mappedAggregate = Builder
-        .mappedAggregate(aggregateMapping)
+        const mappedDocument = Builder
+        .mappedDocument(mapping)
         .addFieldValue("name", "test")
         .addFieldValue("surname", "ipsum")
         .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
         .build();
 
-        const managedAggregate = new ManagedAggregate(mappedAggregate);
-        const aggregateMock = Builder.aggregateManager();
-        aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
-        const denormalizer = aggregateMock.$normalizer;
-        it("should map managed aggregate to JSON with metadata.", () => {
+        const managedDocument = new RootDocument(mappedDocument);
+        const documentMock = Builder.documentManager();
+        documentMock.$mappings.set(mapping.$name, mapping);
+        const denormalizer = documentMock.$normalizer;
+        it("should map managed document to JSON with metadata.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
                 name: "test",
                 surname: "ipsum",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "test_aggr",
+                [documentMock.$symbol]: {
+                    documentName: "test_aggr",
                 },
             };
-            const denormalizedJSON = denormalizer.normalize(managedAggregate.$aggregate);
+            const denormalizedJSON = denormalizer.normalize(managedDocument.$document);
             expect(denormalizedJSON).toEqual(json);
         });
 
-        it("should map JSON with metadata to aggregate.", () => {
+        it("should map JSON with metadata to document.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "test_aggr",
+                [documentMock.$symbol]: {
+                    documentName: "test_aggr",
                 },
                 name: "test",
                 surname: "ipsum",
             };
-            const denormalizedAggregate: MappedAggregate = denormalizer.denormalize(json);
-            expect(denormalizedAggregate.computeChanges(mappedAggregate)).toBeFalsy();
+            const denormalizedDocument: MappedDocument = denormalizer.denormalize(json);
+            expect(denormalizedDocument.computeChanges(mappedDocument)).toBeFalsy();
         });
 
         it("should fail if document not found.", () => {
             expect(() => {
                 const json = {id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "non_existent",
+                [documentMock.$symbol]: {
+                    documentName: "non_existent",
                 },
                 name: "test",
                 surname: "ipsum",
@@ -75,114 +69,114 @@ describe("AggregateManager", () => {
     });
 
     describe("Child-document (de)normalization", () => {
-        const childAggregateMapping = Builder
+        const childDocumentMapping = Builder
         .mapping("child_lorem")
         .addField(new StringField("child_text"))
         .build();
 
-        const aggregateMapping = Builder
+        const mapping = Builder
     .mapping("root_lorem")
     .addField(new StringField("test"))
     .addField(new IdField("id"))
-    .addField(new ChildField("lorem_child", childAggregateMapping))
+    .addField(new ChildField("lorem_child", childDocumentMapping))
     .build();
 
-        const childMappedAggregate = Builder
-    .mappedAggregate(childAggregateMapping)
+        const childMappedDocument = Builder
+    .mappedDocument(childDocumentMapping)
     .addFieldValue("child_text", "lorem_ipsum")
     .build();
 
-        const mappedAggregate = Builder
-    .mappedAggregate(aggregateMapping)
+        const mappedDocument = Builder
+    .mappedDocument(mapping)
     .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
     .addFieldValue("test", "lorem")
-    .addFieldValue("lorem_child", childMappedAggregate)
+    .addFieldValue("lorem_child", childMappedDocument)
     .build();
 
-        const aggregateMock = Builder.aggregateManager();
-        const denormalizer = aggregateMock.$normalizer;
-        aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
-        aggregateMock.$mappings.set(childAggregateMapping.$name, childAggregateMapping);
+        const documentMock = Builder.documentManager();
+        const denormalizer = documentMock.$normalizer;
+        documentMock.$mappings.set(mapping.$name, mapping);
+        documentMock.$mappings.set(childDocumentMapping.$name, childDocumentMapping);
 
-        it("should map JSON with metadata to aggregate with child.", () => {
+        it("should map JSON with metadata to document with child.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_child: {
                     child_text: "lorem_ipsum",
                 },
                 test: "lorem",
             };
-            const denormalizedAggregateWithChild: MappedAggregate = denormalizer.denormalize(json);
-            expect(denormalizedAggregateWithChild.computeChanges(mappedAggregate)).toBeFalsy();
+            const denormalizedDocumentWithChild: MappedDocument = denormalizer.denormalize(json);
+            expect(denormalizedDocumentWithChild.computeChanges(mappedDocument)).toBeFalsy();
         });
 
-        it("should map managed aggregate to JSON with metadata.", () => {
+        it("should map managed document to JSON with metadata.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_child: {
                     child_text: "lorem_ipsum",
                 },
                 test: "lorem",
             };
-            const objectJson: any = denormalizer.normalize(mappedAggregate);
+            const objectJson: any = denormalizer.normalize(mappedDocument);
             expect(objectJson).toEqual(json);
         });
     });
 
     describe("Multi-level-child-document (de)normalization", () => {
-        const childChildAggregateMapping = Builder
+        const childChildDocumentMapping = Builder
         .mapping("child_child_lorem")
         .addField(new StringField("child_child_text"))
         .build();
 
-        const childAggregateMapping = Builder
+        const childDocumentMapping = Builder
         .mapping("child_lorem")
         .addField(new StringField("child_text"))
-        .addField(new ChildField("child_child", childChildAggregateMapping))
+        .addField(new ChildField("child_child", childChildDocumentMapping))
         .build();
 
-        const aggregateMapping = Builder
+        const documentMapping = Builder
     .mapping("root_lorem")
     .addField(new StringField("test"))
     .addField(new IdField("id"))
-    .addField(new ChildField("lorem_child", childAggregateMapping))
+    .addField(new ChildField("lorem_child", childDocumentMapping))
     .build();
 
-        const childChildMappedAggregate = Builder
-    .mappedAggregate(childChildAggregateMapping)
+        const childChildMappedDocument = Builder
+    .mappedDocument(childChildDocumentMapping)
     .addFieldValue("child_child_text", "child_child_lorem_ipsum")
     .build();
 
-        const childMappedAggregate = Builder
-    .mappedAggregate(childAggregateMapping)
+        const childMappedDocument = Builder
+    .mappedDocument(childDocumentMapping)
     .addFieldValue("child_text", "child_lorem_ipsum")
-    .addFieldValue("child_child", childChildMappedAggregate)
+    .addFieldValue("child_child", childChildMappedDocument)
     .build();
 
-        const mappedAggregate = Builder
-    .mappedAggregate(aggregateMapping)
+        const mappedDocument = Builder
+    .mappedDocument(documentMapping)
     .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
     .addFieldValue("test", "lorem")
-    .addFieldValue("lorem_child", childMappedAggregate)
+    .addFieldValue("lorem_child", childMappedDocument)
     .build();
 
-        const aggregateMock = Builder.aggregateManager();
-        const denormalizer = aggregateMock.$normalizer;
-        aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
-        aggregateMock.$mappings.set(childAggregateMapping.$name, childAggregateMapping);
-        aggregateMock.$mappings.set(childChildAggregateMapping.$name, childChildAggregateMapping);
+        const documentMock = Builder.documentManager();
+        const denormalizer = documentMock.$normalizer;
+        documentMock.$mappings.set(documentMapping.$name, documentMapping);
+        documentMock.$mappings.set(childDocumentMapping.$name, childDocumentMapping);
+        documentMock.$mappings.set(childChildDocumentMapping.$name, childChildDocumentMapping);
 
-        it("should map JSON with metadata to aggregate with child.", () => {
+        it("should map JSON with metadata to document with child.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_child: {
                     child_child: {
@@ -192,16 +186,16 @@ describe("AggregateManager", () => {
                 },
                 test: "lorem",
             };
-            const denormalizedAggregateWithChild: MappedAggregate = denormalizer.denormalize(json);
-            denormalizedAggregateWithChild.computeChanges(mappedAggregate);
-            expect(denormalizedAggregateWithChild.$changes.size).toEqual(0);
+            const denormalizedDocumentWithChild: MappedDocument = denormalizer.denormalize(json);
+            denormalizedDocumentWithChild.computeChanges(mappedDocument);
+            expect(denormalizedDocumentWithChild.$changes.size).toEqual(0);
         });
 
-        it("should map managed aggregate to JSON with metadata.", () => {
+        it("should map managed document to JSON with metadata.", () => {
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_child: {
                     child_child: {
@@ -211,48 +205,48 @@ describe("AggregateManager", () => {
                 },
                 test: "lorem",
             };
-            const objectJson: any = denormalizer.normalize(mappedAggregate);
+            const objectJson: any = denormalizer.normalize(mappedDocument);
             expect(objectJson).toEqual(json);
         });
     });
 
     describe("Children (de)normalization.", () => {
         it("Should normalize array of child", () => {
-            const childAggregateMapping = Builder
+            const childDocumentMapping = Builder
             .mapping("child_lorem")
             .addField(new StringField("child_text"))
             .build();
 
-            const aggregateMapping = Builder
+            const rootMapping = Builder
         .mapping("root_lorem")
         .addField(new StringField("test"))
         .addField(new IdField("id"))
-        .addField(new ChildrenField("lorem_childs", childAggregateMapping))
+        .addField(new ChildrenField("lorem_childs", childDocumentMapping))
         .build();
 
             const children = [];
             for (let i = 0; i < 5; i += 1) {
             children.push(Builder
-                .mappedAggregate(childAggregateMapping)
+                .mappedDocument(childDocumentMapping)
                 .addFieldValue("child_text", "lorem_ipsum" + i)
                 .build());
         }
 
-            const mappedAggregate = Builder
-        .mappedAggregate(aggregateMapping)
+            const mappedDocument = Builder
+        .mappedDocument(rootMapping)
         .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
         .addFieldValue("test", "lorem")
         .addFieldValue("lorem_childs", children)
         .build();
 
-            const aggregateMock = Builder.aggregateManager();
-            const denormalizer = aggregateMock.$normalizer;
-            aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
-            aggregateMock.$mappings.set(childAggregateMapping.$name, childAggregateMapping);
+            const documentMock = Builder.documentManager();
+            const denormalizer = documentMock.$normalizer;
+            documentMock.$mappings.set(rootMapping.$name, rootMapping);
+            documentMock.$mappings.set(childDocumentMapping.$name, childDocumentMapping);
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_childs: [
                     {child_text: "lorem_ipsum0"},
@@ -263,45 +257,45 @@ describe("AggregateManager", () => {
                 ],
                 test: "lorem",
             };
-            expect(denormalizer.normalize(mappedAggregate)).toEqual(json);
+            expect(denormalizer.normalize(mappedDocument)).toEqual(json);
         });
 
         it("Should denormalize array of child", () => {
-            const childAggregateMapping = Builder
+            const childDocumentMapping = Builder
             .mapping("child_lorem")
             .addField(new StringField("child_text"))
             .build();
 
-            const aggregateMapping = Builder
+            const documentMapping = Builder
         .mapping("root_lorem")
         .addField(new StringField("test"))
         .addField(new IdField("id"))
-        .addField(new ChildrenField("lorem_childs", childAggregateMapping))
+        .addField(new ChildrenField("lorem_childs", childDocumentMapping))
         .build();
 
             const children = [];
             for (let i = 0; i < 5; i += 1) {
             children.push(Builder
-                .mappedAggregate(childAggregateMapping)
+                .mappedDocument(childDocumentMapping)
                 .addFieldValue("child_text", "lorem_ipsum" + i)
                 .build());
         }
 
-            const mappedAggregate = Builder
-        .mappedAggregate(aggregateMapping)
+            const mappedDocument = Builder
+        .mappedDocument(documentMapping)
         .addFieldValue("id", "9181ee1a-030b-40d3-9d2c-168db5c03c5e")
         .addFieldValue("test", "lorem")
         .addFieldValue("lorem_childs", children)
         .build();
 
-            const aggregateMock = Builder.aggregateManager();
-            const denormalizer = aggregateMock.$normalizer;
-            aggregateMock.$mappings.set(aggregateMapping.$name, aggregateMapping);
-            aggregateMock.$mappings.set(childAggregateMapping.$name, childAggregateMapping);
+            const documentMock = Builder.documentManager();
+            const denormalizer = documentMock.$normalizer;
+            documentMock.$mappings.set(documentMapping.$name, documentMapping);
+            documentMock.$mappings.set(childDocumentMapping.$name, childDocumentMapping);
             const json = {
                 id: "9181ee1a-030b-40d3-9d2c-168db5c03c5e",
-                [aggregateMock.$symbol]: {
-                    aggregateName: "root_lorem",
+                [documentMock.$symbol]: {
+                    documentName: "root_lorem",
                 },
                 lorem_childs: [
                     {child_text: "lorem_ipsum0"},
@@ -313,9 +307,9 @@ describe("AggregateManager", () => {
                 test: "lorem",
             };
 
-            const denormalizedMappedAggregate = denormalizer.denormalize(json);
-            mappedAggregate.computeChanges(denormalizedMappedAggregate);
-            expect(mappedAggregate.$changes.size).toEqual(0);
+            const denormalizedMappedDocument = denormalizer.denormalize(json);
+            mappedDocument.computeChanges(denormalizedMappedDocument);
+            expect(mappedDocument.$changes.size).toEqual(0);
         });
     });
 });
