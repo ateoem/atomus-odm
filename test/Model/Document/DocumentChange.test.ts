@@ -1,10 +1,11 @@
 import AggregateChange from "../../../src/Model/Document/DocumentChange";
 import Field from "../../../src/Model/Mapping/Field";
+import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
 
 describe("DocumentChange", () => {
     it("should have setters/getters.", () => {
-        const field = new Field("test", FieldType.string);
+        const field = new StringField("test");
         const change = new AggregateChange(field, 1, 2);
         expect(change.$field).toBe(field);
         expect(change.$changed).toEqual("2");

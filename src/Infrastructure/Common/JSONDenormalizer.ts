@@ -12,25 +12,24 @@ class JSONDenormalizer implements IAggregateNormalizer {
     private manager: AggregateManager;
 
     public normalize(aggregate: MappedAggregate, isChild: boolean = false): object {
-        const fieldValuesArray = aggregate.$fieldValuesArray;
-        const computedFields = fieldValuesArray.reduce((jsonObj: object, fieldValue: FieldValue) => {
-            if (fieldValue.$type === FieldType.child) {
-                jsonObj[fieldValue.$name] = this.normalize(fieldValue.$value, true);
-            } else if (fieldValue.$type === FieldType.children) {
-                jsonObj[fieldValue.$name] =
-                    fieldValue.$value.map((childAggregate: MappedAggregate) => this.normalize(childAggregate, true) );
+        const obj = {};
+        aggregate.$mapping.$fields.forEach((field: Field) => {
+            if (field instanceof ChildField) {
+                obj[field.$name] = this.normalize(aggregate.getChild(field.$name), true);
+            } else if (field instanceof ChildrenField) {
+                obj[field.$name] = aggregate.getChildren(field.$name)
+                .map((child: MappedAggregate) => this.normalize(child, true));
             } else {
-                jsonObj[fieldValue.$name] = fieldValue.$value;
+                obj[field.$name] = aggregate.$fieldValues.get(field.$name).$value;
             }
-            return {...jsonObj};
-        }, {});
+        });
 
         if (!isChild) {
-        const metadata = {aggregateName: aggregate.$name};
-        computedFields[this.manager.$symbol] = metadata;
+            const metadata = {aggregateName: aggregate.$name};
+            obj[this.manager.$symbol] = metadata;
         }
 
-        return computedFields;
+        return obj;
     }
 
     public denormalize(payload: any, mappingAggregateGiven: AggregateMapping = null): MappedAggregate {

@@ -1,7 +1,11 @@
 import AggregateChange from "../../Model/Document/DocumentChange";
 import FieldValue from "../../Model/Document/FieldValue";
+import MappedAggregate from "../../Model/Document/MappedDocument";
 import ManagedAggregate from "../../Model/Document/RootDocument";
 import AggregateMapping from "../../Model/Mapping/DocumentMapping";
+import Field from "../../Model/Mapping/Field";
+import ChildField from "../../Model/Mapping/Fields/ChildField";
+import ChildrenField from "../../Model/Mapping/Fields/ChildrenField";
 import AggregateManager from "../../Model/ODM/DocumentManager";
 import AggregateRepository from "../../Model/ODM/DocumentRepository";
 import IAggregateNormalizer from "../../Model/ODM/IDocumentNormalizer";
@@ -31,21 +35,36 @@ class InMemoryManager extends AggregateManager {
         this.managedAggregates.forEach( (aggregate: ManagedAggregate) => {
             const repository = this.getRepository(aggregate.$aggregate.$name);
 
-            if (aggregate.$changes.size === 0 && repository.$data.has(aggregate.$id)) {
+            if (!aggregate.$isDirty && repository.$data.has(aggregate.$id)) {
                 return;
             }
-            const obj = {};
-            if (!repository.$data.has(aggregate.$id)) {
-                aggregate.$aggregate.$fieldValuesArray.forEach( (fieldValue: FieldValue) => {
-                    obj[fieldValue.$field.$name] = fieldValue.$value;
-                });
-                repository.$data.set(aggregate.$id, obj);
-            }
-            const aggregateData = repository.$data.get(aggregate.$id);
+            this.updateAggregate(aggregate.$aggregate);
 
-            aggregate.$changes.forEach((change: AggregateChange) => {
-                aggregateData[change.$field.$name] = change.$changed;
-            });
+            this.manageAggregate(aggregate);
+            repository.$data.set(aggregate.$id, this.$normalizer.normalize(aggregate.$aggregate));
+        });
+    }
+
+    public updateAggregate(aggregate: MappedAggregate) {
+        aggregate.$mapping.$fields.forEach((field: Field) => {
+            if (field instanceof ChildField) {
+                this.updateAggregate(aggregate.getChild(field.$name));
+            } else if (field instanceof ChildrenField) {
+                const children = aggregate.getChildren(field.$name);
+                const childrenNotRemoved = children.
+                    filter((child: MappedAggregate) => !child.$changes.has("delete"));
+                aggregate.setChildren(field.$name, childrenNotRemoved);
+                childrenNotRemoved.forEach((child: MappedAggregate) => {
+                    this.updateAggregate(child);
+                });
+            } else {
+                if (!aggregate.$changes.has(field.$name)) {
+                    return;
+                }
+                const newValue = aggregate.$changes.get(field.$name).$changed;
+                aggregate.$fieldValues.set(field.$name, new FieldValue(field, newValue));
+                aggregate.$changes.delete(field.$name);
+            }
         });
     }
 }

@@ -78,6 +78,10 @@ class MappedAggregate extends Document {
         return this.children.get(name);
     }
 
+    public setChildren(name: string, aggregates: MappedAggregate[]) {
+        this.children.set(name, aggregates);
+    }
+
     public computeChanges(dirtyAggregate: MappedAggregate): boolean {
         if (dirtyAggregate.$fieldValues.size !== this.$fieldValues.size) {
             throw new Error("Incosinstensy error.");
@@ -127,7 +131,7 @@ class MappedAggregate extends Document {
 
     private mapChild() {
         this.fieldValues.forEach( (fieldValue: FieldValue) => {
-            if (fieldValue.$type !== FieldType.child) {
+            if (! (fieldValue.$field instanceof ChildField) ) {
                 return;
             }
             this.child.set(fieldValue.$name, fieldValue.$value);
@@ -136,10 +140,10 @@ class MappedAggregate extends Document {
 
     private mapChildren() {
         this.fieldValues.forEach( (fieldValue: FieldValue) => {
-            if (fieldValue.$type !== FieldType.children) {
+            if (! (fieldValue.$field instanceof ChildrenField) ) {
                 return;
             }
-            this.children.set(fieldValue.$name, fieldValue.$value);
+            this.children.set(fieldValue.$name, fieldValue.$value || []);
         });
     }
 
@@ -150,6 +154,8 @@ class MappedAggregate extends Document {
                     this.fieldValues.set(field.$name,
                         new FieldValue(field, new MappedAggregate(field.$mapping)),
                     );
+                } else if (field instanceof ChildrenField) {
+                    this.fieldValues.set(field.$name, new FieldValue(field, []));
                 } else {
                     this.fieldValues.set(field.$name, new FieldValue(field, ""));
                 }

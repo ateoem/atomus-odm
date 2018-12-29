@@ -24,20 +24,30 @@ class ManagedAggregate extends Document {
         return this.aggregate.$changes;
     }
 
+    public get $isDirty() {
+        return this.isDirty;
+    }
+
     private aggregate: MappedAggregate;
+    private isDirty: boolean;
 
     constructor($aggregate: MappedAggregate) {
         super();
         this.aggregate = $aggregate;
         this.computeUuid();
+        this.isDirty = false;
     }
 
     public getChild(name: string): MappedAggregate {
         return this.aggregate.getChild(name);
     }
 
-    public computeChanges(dirtyAggregate: ManagedAggregate): AggregateChanges {
-        return this.aggregate.computeChanges(dirtyAggregate.$aggregate);
+    public computeChanges(dirtyAggregate: ManagedAggregate|MappedAggregate): boolean {
+        const aggregateToCompare = (dirtyAggregate instanceof MappedAggregate)
+            ? dirtyAggregate : dirtyAggregate.$aggregate;
+        const isDirty = this.aggregate.computeChanges(aggregateToCompare);
+        this.isDirty = isDirty;
+        return isDirty;
     }
 
     private computeUuid() {

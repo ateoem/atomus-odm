@@ -7,6 +7,10 @@ class DocumentChanges {
         this.changed = new Map();
     }
 
+    public clear() {
+        this.changed = new Map();
+    }
+
     public setChange(change: DocumentChange) {
         this.changed.set(change.$field.$name, change);
     }

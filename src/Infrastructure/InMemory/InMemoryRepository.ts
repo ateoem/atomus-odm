@@ -1,3 +1,4 @@
+import ManagedAggregate from "../../Model/Document/RootDocument";
 import AggregateMapping from "../../Model/Mapping/DocumentMapping";
 import AggregateManager from "../../Model/ODM/DocumentManager";
 import AggregateRepository from "../../Model/ODM/DocumentRepository";
@@ -15,11 +16,17 @@ class InMemoryRepository extends AggregateRepository {
     }
 
     public findById(uuid: string): Promise<object> {
-        return Promise.resolve(this.data.get(uuid));
+        const json = this.data.get(uuid);
+        this.aggregateManager.manageAggregate(
+            new ManagedAggregate(this.aggregateManager.$normalizer.denormalize(json)));
+        return Promise.resolve(json);
     }
 
     public findOneBy(uuid: string): Promise<object> {
-        return Promise.resolve(this.data.get(uuid));
+        const json = this.data.get(uuid);
+        this.aggregateManager.manageAggregate(
+            new ManagedAggregate(this.aggregateManager.$normalizer.denormalize(json)));
+        return Promise.resolve(json);
     }
 
     public findBy(criterias: []): Promise<object[]> {

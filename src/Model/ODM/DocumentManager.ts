@@ -19,15 +19,22 @@ abstract class AggregateManager {
     }
 
     public persist(payload: object) {
-        const dirtyAggregate = this.normalizer.denormalize(payload);
+        const dirtyAggregate: MappedAggregate = this.normalizer.denormalize(payload);
         const originAggregate: ManagedAggregate = this.managedAggregates.get(dirtyAggregate.$id);
 
         if (!originAggregate) {
             throw new Error("Aggregate not found!");
         }
 
-        const changes: AggregateChanges = originAggregate.$aggregate.computeChanges(dirtyAggregate);
+        originAggregate.computeChanges(dirtyAggregate);
         // originAggregate.updateChanges(changes);
+    }
+
+    public manageMapping(mapping: AggregateMapping) {
+        if (this.mappings.has(mapping.$name)) {
+            throw new Error("Mapping in system!");
+        }
+        this.mappings.set(mapping.$name, mapping);
     }
 
     public manageAggregate(aggregate: ManagedAggregate) {
