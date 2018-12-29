@@ -1,3 +1,4 @@
+import * as PropertyPath from "get-value";
 import ManagedAggregate from "../../Model/Document/RootDocument";
 import AggregateMapping from "../../Model/Mapping/DocumentMapping";
 import AggregateManager from "../../Model/ODM/DocumentManager";
@@ -29,12 +30,16 @@ class InMemoryRepository extends AggregateRepository {
         return Promise.resolve(json);
     }
 
-    public findBy(criterias: []): Promise<object[]> {
-        throw new Error("Method not implemented.");
+    public findBy(criterias: {}): Promise<object[]> {
+        return Promise.resolve(Array.from(this.$data.values()).filter((obj) => {
+            return Object.keys(criterias).every(
+                (key) => PropertyPath(obj, key) === criterias[key],
+            );
+        }));
     }
 
     public findAll(): Promise<object[]> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve(Array.from(this.$data.values()));
     }
 
 }

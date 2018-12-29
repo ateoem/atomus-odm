@@ -13,7 +13,10 @@
   "dependencies": {
     "eslint": "^5.9.0",
     "faker": "^4.1.0",
+    "get-value": "^3.0.1",
     "lokijs": "^1.5.5",
+    "object-path": "^0.11.4",
+    "property-path": "0.0.5",
     "tslint": "^5.11.0",
     "typescript": "^3.2.1",
     "uuid-validate": "0.0.3",

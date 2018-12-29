@@ -12,7 +12,7 @@ abstract class AggregateRepository {
 
     public abstract findById(uuid: string): Promise<object>;
     public abstract findOneBy(uuid: string): Promise<object>;
-    public abstract findBy(criterias: []): Promise<object[]>;
+    public abstract findBy(criterias: {}): Promise<object[]>;
     public abstract findAll(): Promise<object[]>;
 }
 
