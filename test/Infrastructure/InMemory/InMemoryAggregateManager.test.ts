@@ -155,6 +155,16 @@ describe("InMemoryAggregateManager", () => {
             manager.flush();
             retrievedDocument = await repository.findById(post.id);
             expect(retrievedDocument.comments.length).toBe(2);
+
+            post.author = {};
+            manager.persist(post);
+            manager.flush();
+            retrievedDocument = await repository.findById(post.id);
+            expect(retrievedDocument.author).toEqual({
+                name: "",
+                surname: "",
+            });
+
         });
     });
 });
