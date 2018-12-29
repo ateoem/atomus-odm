@@ -24,16 +24,16 @@ class ManagedAggregate extends Document {
         return this.aggregate.$changes;
     }
 
-    public get $childChanges(): Map<string, DocumentChanges> {
-        return this.aggregate.$childChanges;
-    }
-
     private aggregate: MappedAggregate;
 
     constructor($aggregate: MappedAggregate) {
         super();
         this.aggregate = $aggregate;
         this.computeUuid();
+    }
+
+    public getChild(name: string): MappedAggregate {
+        return this.aggregate.getChild(name);
     }
 
     public computeChanges(dirtyAggregate: ManagedAggregate): AggregateChanges {

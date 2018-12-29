@@ -33,12 +33,9 @@ class MappedAggregate extends Document {
         return this.changes.$changed;
     }
 
-    public get $childChanges(): Map<string, DocumentChanges> {
-        return this.childChanges;
-    }
-
     private changes: AggregateChanges;
-    private childChanges: Map<string, AggregateChanges>;
+    private child: Map<string, MappedAggregate>;
+    private children: Map<string, MappedAggregate[]>;
     private name: string = "";
     private aggregateMapping: AggregateMapping;
     private fieldValues: Map<string, FieldValue>;
@@ -51,8 +48,8 @@ class MappedAggregate extends Document {
         this.fieldValues = new Map();
         fieldValues.forEach((fieldValue: FieldValue) => this.fieldValues.set(fieldValue.$name, fieldValue));
         this.changes = new AggregateChanges();
-        this.childChanges = new Map();
-
+        this.child = new Map();
+        this.children = new Map();
         this.name = aggregateMapping.$name;
         this.aggregateMapping = new AggregateMapping(
             aggregateMapping.$name,
@@ -60,33 +57,89 @@ class MappedAggregate extends Document {
         );
 
         this.computeFieldValues();
+        this.mapChild();
+        this.mapChildren();
         this.guardAgainstInconsistency();
     }
 
-    public computeChanges(dirtyAggregate: MappedAggregate): AggregateChanges {
+    public getChild(name: string): MappedAggregate {
+        if (!this.child.has(name)) {
+            throw new Error("No child found!");
+        }
+        return this.child.get(name);
+    }
+
+    public getChildren(name: string): MappedAggregate[] {
+        if (!this.children.has(name)) {
+            throw new Error("No child found!");
+        }
+        return this.children.get(name);
+    }
+
+    public computeChanges(dirtyAggregate: MappedAggregate): boolean {
         if (dirtyAggregate.$fieldValues.size !== this.$fieldValues.size) {
             const b = 1;
             throw new Error("Incosinstensy error.");
         }
         const changes = new AggregateChanges();
+        let isAnythingChanged = false;
         this.$fieldValues.forEach((fieldValue) => {
             const dirtyFieldValue = dirtyAggregate.$fieldValues.get(fieldValue.$name);
 
             if (dirtyFieldValue === undefined || !dirtyFieldValue.$field.isEqual(fieldValue.$field)) {
                 throw new Error("Field not found!");
             }
-            if (fieldValue.$type !== FieldType.child) {
-                if (dirtyFieldValue.$value !== fieldValue.$value) {
-                    changes.setChange(new DocumentChange(fieldValue.$field, fieldValue.$value, dirtyFieldValue.$value));
-                }
-            } else {
+            if (fieldValue.$type === FieldType.child) {
                 const childValue: MappedAggregate = fieldValue.$value;
                 const dirtyChildValue: MappedAggregate = dirtyFieldValue.$value;
-                this.childChanges.set(childValue.$name, childValue.computeChanges(dirtyChildValue));
+                childValue.computeChanges(dirtyChildValue);
+                if (childValue.$changes.size !== 0) {
+                    isAnythingChanged = true;
+                }
+            } else if (fieldValue.$type === FieldType.children) {
+                const max = Math.max(fieldValue.$value.length, dirtyFieldValue.$value.length);
+                for (let i = 0; i < max; i++) {
+                    if (!fieldValue.$value[i]) {
+                        fieldValue.$value[i] = new MappedAggregate(fieldValue.$field.$metadata.mapping);
+                        isAnythingChanged = true;
+                    } else if (!dirtyFieldValue.$value[i]) {
+                        fieldValue.$value[i].$changes.set("delete", true);
+                        isAnythingChanged = true;
+                        continue;
+                    }
+                    fieldValue.$value[i].computeChanges(dirtyFieldValue.$value[i]);
+
+                    if (fieldValue.$value[i].$changes.size !== 0) {
+                        isAnythingChanged = true;
+                    }
+                }
+            } else {
+                if (dirtyFieldValue.$value !== fieldValue.$value) {
+                    isAnythingChanged = true;
+                    changes.setChange(new DocumentChange(fieldValue.$field, fieldValue.$value, dirtyFieldValue.$value));
+                }
             }
         });
         this.changes = changes;
-        return changes;
+        return isAnythingChanged;
+    }
+
+    private mapChild() {
+        this.fieldValues.forEach( (fieldValue: FieldValue) => {
+            if (fieldValue.$type !== FieldType.child) {
+                return;
+            }
+            this.child.set(fieldValue.$name, fieldValue.$value);
+        });
+    }
+
+    private mapChildren() {
+        this.fieldValues.forEach( (fieldValue: FieldValue) => {
+            if (fieldValue.$type !== FieldType.children) {
+                return;
+            }
+            this.children.set(fieldValue.$name, fieldValue.$value);
+        });
     }
 
     private computeFieldValues() {

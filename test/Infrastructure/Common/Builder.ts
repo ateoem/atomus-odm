@@ -38,7 +38,7 @@ class MappedAggregateBuilder {
     public addFieldValue(name: string, value: any) {
         const field = this.aggregateMapping.get(name);
         if (!field) {
-            throw new Error("Field not found!");
+            throw new Error("Field not found!" + this.aggregateMapping.$name);
         }
         this.fieldValues.push(new FieldValue(field, value));
 

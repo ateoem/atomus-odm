@@ -14,6 +14,9 @@ class JSONDenormalizer implements IAggregateNormalizer {
         const computedFields = fieldValuesArray.reduce((jsonObj: object, fieldValue: FieldValue) => {
             if (fieldValue.$type === FieldType.child) {
                 jsonObj[fieldValue.$name] = this.normalize(fieldValue.$value, true);
+            } else if (fieldValue.$type === FieldType.children) {
+                jsonObj[fieldValue.$name] =
+                    fieldValue.$value.map((childAggregate: MappedAggregate) => this.normalize(childAggregate, true) );
             } else {
                 jsonObj[fieldValue.$name] = fieldValue.$value;
             }
@@ -42,6 +45,11 @@ class JSONDenormalizer implements IAggregateNormalizer {
                     gotField,
                     this.denormalize(tmp[key], gotField.$metadata.mapping),
                 );
+            } else if (gotField.$type === FieldType.children) {
+                const mappedArray = tmp[key].map((obj) =>
+                    this.denormalize(obj, gotField.$metadata.mapping),
+                );
+                return new FieldValue(gotField, mappedArray);
             } else {
                 return new FieldValue(gotField, tmp[key]);
             }
