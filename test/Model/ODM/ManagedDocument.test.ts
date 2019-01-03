@@ -8,8 +8,8 @@ import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
 import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
-import { UserDocument } from "../../Common/Models";
-import Builder from "../../Infrastructure/Common/Builder";
+import { RootUserMapping } from "../../Common/Models";
+import { Builder } from "../../Infrastructure/Common/Builder";
 
 describe("ManagedDocument", () => {
     it("should have getters/setters.", () => {
@@ -32,13 +32,13 @@ describe("ManagedDocument", () => {
 
     it("should compute changes.", () => {
         const userMappedDocument = Builder
-        .mappedDocument(UserDocument)
+        .mappedDocument(RootUserMapping)
         .addFieldValue("name", "test")
         .addFieldValue("surname", "ipsum")
         .build();
 
         const secondMappedDocument = Builder
-        .mappedDocument(UserDocument)
+        .mappedDocument(RootUserMapping)
         .addFieldValue("name", "test")
         .addFieldValue("surname", "ipsum")
         .build();

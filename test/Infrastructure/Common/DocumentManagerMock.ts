@@ -3,6 +3,10 @@ import DocumentManager from "../../../src/Model/ODM/DocumentManager";
 import DocumentRepository from "../../../src/Model/ODM/DocumentRepository";
 
 class DocumentManagerMock extends DocumentManager {
+    constructor($normalizer) {
+        super($normalizer);
+    }
+
     public flush() {
         return 1;
     }

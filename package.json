@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "test-cov": "jest --coverage",
-    "lint": "tslint --project tsconfig.json --fix"
+    "tslint": "tslint --project tsconfig.json --fix",
+    "tslint-prettier": "tslint-config-prettier-check ./tslint.json"
   },
   "author": "Mateusz Fejczaruk",
   "license": "ISC",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "jest": "^23.6.0",
-    "ts-jest": "^23.10.5"
+    "ts-jest": "^23.10.5",
+    "tslint-config-prettier": "^1.17.0"
   }
 }

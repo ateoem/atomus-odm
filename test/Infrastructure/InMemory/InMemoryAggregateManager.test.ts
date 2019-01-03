@@ -2,14 +2,14 @@ import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalize
 import InMemoryManager from "../../../src/Infrastructure/InMemory/InMemoryManager";
 import DocumentManager from "../../../src/Model/ODM/DocumentManager";
 import DocumentRepository from "../../../src/Model/ODM/DocumentRepository";
-import { AuthorMapping, CommentMapping, PostMapping, UserDocument } from "../../Common/Models";
+import { AuthorMapping, CommentMapping, RootPostMapping, RootUserMapping } from "../../Common/Models";
 
 describe("InMemoryDocumentManager", () => {
     describe("Flat-Document", () => {
         const denormalizer = new JSONDenormalizer();
         const manager = new InMemoryManager(denormalizer);
         denormalizer.setDocumentManager(manager);
-        manager.manageMapping(UserDocument);
+        manager.manageMapping(RootUserMapping);
 
         it("should be able to create new sample document.", () => {
             const newDocument: any = manager.createNewDocument("user");
@@ -67,11 +67,11 @@ describe("InMemoryDocumentManager", () => {
             normalizer.setDocumentManager(manager);
             manager.manageMapping(AuthorMapping);
             manager.manageMapping(CommentMapping);
-            manager.manageMapping(PostMapping);
+            manager.manageMapping(RootPostMapping);
         });
 
         it("should create empty blogpost element.", () => {
-            const post: any = manager.createNewDocument("blogpost");
+            const post: any = manager.createNewDocument("post");
             expect(post.title).toBe("");
             expect(post.comments).toEqual([]);
             expect(post.author.name).toEqual("");
@@ -79,13 +79,13 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should be able to retrieve blogpost repository.", () => {
-            const repository: DocumentRepository = manager.getRepository("blogpost");
+            const repository: DocumentRepository = manager.getRepository("post");
             expect(repository).toBeInstanceOf(DocumentRepository);
         });
 
         it("should be able to save blogpost.", async () => {
-            const repository = manager.getRepository("blogpost");
-            const post: any = manager.createNewDocument("blogpost");
+            const repository = manager.getRepository("post");
+            const post: any = manager.createNewDocument("post");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -97,8 +97,8 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should be able to save blogpost with comments <happypath>.", async () => {
-            const repository = manager.getRepository("blogpost");
-            const post: any = manager.createNewDocument("blogpost");
+            const repository = manager.getRepository("post");
+            const post: any = manager.createNewDocument("post");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -138,11 +138,11 @@ describe("InMemoryDocumentManager", () => {
             });
         });
         it("should be able to retrieve blogpost by title.", async () => {
-            const repository = manager.getRepository("blogpost");
+            const repository = manager.getRepository("post");
 
-            const blogpost1: any = manager.createNewDocument("blogpost");
-            const blogpost2: any = manager.createNewDocument("blogpost");
-            const blogpost3: any = manager.createNewDocument("blogpost");
+            const blogpost1: any = manager.createNewDocument("post");
+            const blogpost2: any = manager.createNewDocument("post");
+            const blogpost3: any = manager.createNewDocument("post");
             blogpost1.title = "lorem";
             blogpost2.title = "ipsum";
             blogpost3.title = "dolor";

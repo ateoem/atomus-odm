@@ -51,7 +51,7 @@ class MappedDocumentBuilder {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class Builder {
+export class Builder {
     public static mapping(name: string): MappingBuilder {
         return new MappingBuilder(name);
     }
@@ -60,12 +60,11 @@ class Builder {
         return new MappedDocumentBuilder(mapping);
     }
 
-    public static documentManager(): DocumentManager {
+    public static documentManager(mappings: DocumentMapping[]): DocumentManager {
         const denormalizer = new JSONDenormalizer();
         const managerMock = new DocumentManagerMock(denormalizer);
         denormalizer.setDocumentManager(managerMock);
+        mappings.forEach( (mapping) => managerMock.manageMapping(mapping));
         return managerMock;
     }
 }
-
-export default Builder;
