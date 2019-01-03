@@ -8,6 +8,7 @@ import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
 import StringField from "../../../src/Model/Mapping/Fields/StringField";
 import FieldType from "../../../src/Model/Mapping/FieldType";
+import { UserDocument } from "../../Common/Models";
 import Builder from "../../Infrastructure/Common/Builder";
 
 describe("ManagedDocument", () => {
@@ -30,22 +31,22 @@ describe("ManagedDocument", () => {
     });
 
     it("should compute changes.", () => {
-        const nameField = new StringField("name");
-        const surnameField = new StringField("surname");
-        const idField = new IdField("id");
+        const userMappedDocument = Builder
+        .mappedDocument(UserDocument)
+        .addFieldValue("name", "test")
+        .addFieldValue("surname", "ipsum")
+        .build();
 
-        const fields = [ nameField, surnameField, idField ];
-        const fieldValues = [
-            new FieldValue(nameField, { value: "test" }),
-            new FieldValue(surnameField, { value: "ipsum" }),
-        ];
+        const secondMappedDocument = Builder
+        .mappedDocument(UserDocument)
+        .addFieldValue("name", "test")
+        .addFieldValue("surname", "ipsum")
+        .build();
 
-        const documentMapping = new DocumentMapping("test_aggr", fields);
+        const managedDocument = new ManagedDocument(userMappedDocument);
+        const differentDocument = new ManagedDocument(secondMappedDocument);
 
-        const managedDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
-        const differentDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
-
-        const computedChanges = differentDocument.computeChanges(managedDocument);
+        differentDocument.computeChanges(managedDocument);
         expect(differentDocument.$changes.size).toEqual(1);
         expect(differentDocument.$changes.has("id")).toBeTruthy();
     });
@@ -86,7 +87,6 @@ describe("ManagedDocument", () => {
             );
 
         const rootDocumentMapping = new DocumentMapping("lorem_root", [ childField, loremField, idField ]);
-        const childDocument = new MappedDocument(childDocumentMapping, [ loremFieldValue ]);
 
         const firstRootDocument = new ManagedDocument(new MappedDocument(rootDocumentMapping, [loremFieldValue]));
         const secondRootDocument = new ManagedDocument(

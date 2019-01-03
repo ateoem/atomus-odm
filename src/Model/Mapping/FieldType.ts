@@ -6,6 +6,7 @@ enum FieldType {
     updated_at,
     child,
     children,
+    number,
 }
 
 export default FieldType;

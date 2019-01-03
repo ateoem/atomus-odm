@@ -37,7 +37,7 @@ class JSONDenormalizer implements IDocumentNormalizer {
         const mappingDocument =
             mappingDocumentGiven || this.manager.$mappings.get(payload[this.manager.$symbol].documentName);
         if (!mappingDocument) {
-            throw new Error("Mapping Document not found!");
+            throw new Error(`Mapping "${payload[this.manager.$symbol].documentName}" not found!`);
         }
         const fieldVals = Object.keys(tmp).map((key) => {
             const gotField: Field = mappingDocument.$fields.get(key);

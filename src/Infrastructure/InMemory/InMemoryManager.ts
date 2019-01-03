@@ -22,7 +22,7 @@ class InMemoryManager extends DocumentManager {
     public getRepository(mappingName: string): InMemoryRepository {
         const mapping = this.mappings.get(mappingName);
         if (!mapping) {
-            throw new Error("Mapping not found!");
+            throw new Error(`Mapping "${mappingName}" not found!`);
         }
         if (!this.repositories.has(mappingName)) {
             this.repositories.set(mappingName, new InMemoryRepository(mapping, this));

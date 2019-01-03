@@ -65,14 +65,14 @@ class MappedDocument extends Document {
 
     public getChild(name: string): MappedDocument {
         if (!this.child.has(name)) {
-            throw new Error("No child found!");
+            throw new Error(`Child under index "${name}" not found!`);
         }
         return this.child.get(name);
     }
 
     public getChildren(name: string): MappedDocument[] {
         if (!this.children.has(name)) {
-            throw new Error("No child found!");
+            throw new Error(`Children under index "${name}" not found!`);
         }
         return this.children.get(name);
     }
@@ -83,7 +83,7 @@ class MappedDocument extends Document {
 
     public computeChanges(dirtyDocument: MappedDocument): boolean {
         if (dirtyDocument.$fieldValues.size !== this.$fieldValues.size) {
-            throw new Error("Incosinstensy error.");
+            throw new Error("Incosinstensy error: different size of aggregates.");
         }
         const changes = new DocumentChanges();
         let isAnythingChanged = false;
