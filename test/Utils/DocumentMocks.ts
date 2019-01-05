@@ -1,4 +1,4 @@
-import { AuthorFactory, RootAuthorFactory, RootCommentFactory, RootPostFactory, CommentFactory } from "../Common/Models";
+import { AuthorFactory, CommentFactory, RootAuthorFactory, RootCommentFactory, RootPostFactory } from "../Common/Models";
 
 export const mockPostJson = ($symbol) => ({
     [$symbol]: { documentName: "root_post" },
