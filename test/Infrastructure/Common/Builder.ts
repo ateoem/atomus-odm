@@ -38,7 +38,7 @@ class MappedDocumentBuilder {
     public addFieldValue(name: string, value: any) {
         const field = this.mapping.get(name);
         if (!field) {
-            throw new Error("Field not found!" + this.mapping.$name);
+            throw new Error("Field not found!" + name + this.mapping.$name);
         }
         this.fieldValues.push(new FieldValue(field, value));
 

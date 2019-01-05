@@ -12,18 +12,18 @@ describe("InMemoryDocumentManager", () => {
         manager.manageMapping(RootUserMapping);
 
         it("should be able to create new sample document.", () => {
-            const newDocument: any = manager.createNewDocument("user");
+            const newDocument: any = manager.createNewDocument("root_user");
             expect(newDocument.id).not.toBeNull();
         });
 
         it("should be able to retrieve document repository.", () => {
-            const repository: DocumentRepository = manager.getRepository("user");
+            const repository: DocumentRepository = manager.getRepository("root_user");
             expect(repository).toBeInstanceOf(DocumentRepository);
         });
 
         it("should be able to persist and flush document properly.", async () => {
-            const repository: DocumentRepository = manager.getRepository("user");
-            const newDocument: any = manager.createNewDocument("user");
+            const repository: DocumentRepository = manager.getRepository("root_user");
+            const newDocument: any = manager.createNewDocument("root_user");
             manager.persist(newDocument);
             manager.flush();
             const retrievedDocument: any = await repository.findById(newDocument.id);
@@ -34,8 +34,8 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should be able to update and flush document properly.", async () => {
-            const repository: DocumentRepository = manager.getRepository("user");
-            const newDocument: any = manager.createNewDocument("user");
+            const repository: DocumentRepository = manager.getRepository("root_user");
+            const newDocument: any = manager.createNewDocument("root_user");
 
             manager.persist(newDocument);
             manager.flush();
@@ -71,7 +71,7 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should create empty blogpost element.", () => {
-            const post: any = manager.createNewDocument("post");
+            const post: any = manager.createNewDocument("root_post");
             expect(post.title).toBe("");
             expect(post.comments).toEqual([]);
             expect(post.author.name).toEqual("");
@@ -79,13 +79,13 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should be able to retrieve blogpost repository.", () => {
-            const repository: DocumentRepository = manager.getRepository("post");
+            const repository: DocumentRepository = manager.getRepository("root_post");
             expect(repository).toBeInstanceOf(DocumentRepository);
         });
 
         it("should be able to save blogpost.", async () => {
-            const repository = manager.getRepository("post");
-            const post: any = manager.createNewDocument("post");
+            const repository = manager.getRepository("root_post");
+            const post: any = manager.createNewDocument("root_post");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -97,8 +97,8 @@ describe("InMemoryDocumentManager", () => {
         });
 
         it("should be able to save blogpost with comments <happypath>.", async () => {
-            const repository = manager.getRepository("post");
-            const post: any = manager.createNewDocument("post");
+            const repository = manager.getRepository("root_post");
+            const post: any = manager.createNewDocument("root_post");
             post.author.name = "Alojzy";
             post.author.surname = "Kwiatkowski";
             post.title = "Lorem Ipsum";
@@ -138,11 +138,11 @@ describe("InMemoryDocumentManager", () => {
             });
         });
         it("should be able to retrieve blogpost by title.", async () => {
-            const repository = manager.getRepository("post");
+            const repository = manager.getRepository("root_post");
 
-            const blogpost1: any = manager.createNewDocument("post");
-            const blogpost2: any = manager.createNewDocument("post");
-            const blogpost3: any = manager.createNewDocument("post");
+            const blogpost1: any = manager.createNewDocument("root_post");
+            const blogpost2: any = manager.createNewDocument("root_post");
+            const blogpost3: any = manager.createNewDocument("root_post");
             blogpost1.title = "lorem";
             blogpost2.title = "ipsum";
             blogpost3.title = "dolor";

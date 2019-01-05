@@ -61,7 +61,7 @@ describe("MappedDocument", () => {
     .addFieldValue("lorem_childs", children)
     .build();
 
-        const documentMock = Builder.documentManager();
+        const documentMock = Builder.documentManager([]);
         const denormalizer = documentMock.$normalizer;
         documentMock.$mappings.set(documentMapping.$name, documentMapping);
         documentMock.$mappings.set(childDocumentMapping.$name, childDocumentMapping);
