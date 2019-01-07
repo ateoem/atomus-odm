@@ -1,13 +1,10 @@
-import DocumentChanges from "../../../src/Model/Document/DocumentChanges";
 import FieldValue from "../../../src/Model/Document/FieldValue";
 import MappedDocument from "../../../src/Model/Document/MappedDocument";
 import ManagedDocument from "../../../src/Model/Document/RootDocument";
 import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
-import Field from "../../../src/Model/Mapping/Field";
 import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
 import StringField from "../../../src/Model/Mapping/Fields/StringField";
-import FieldType from "../../../src/Model/Mapping/FieldType";
 import { RootUserMapping } from "../../Common/Models";
 import { Builder } from "../../Infrastructure/Common/Builder";
 
@@ -67,7 +64,7 @@ describe("ManagedDocument", () => {
         const managedDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
         const differentDocument = new ManagedDocument(new MappedDocument(documentMapping, fieldValues));
 
-        const computedChanges = differentDocument.computeChanges(managedDocument);
+        differentDocument.computeChanges(managedDocument);
         expect(differentDocument.$changes.size).toEqual(1);
         expect(differentDocument.$changes.has("id")).toBeTruthy();
     });
