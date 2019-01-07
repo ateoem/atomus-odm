@@ -168,8 +168,8 @@ class MappedDocument extends Document {
         }
 
         this.fieldValues.forEach((fieldValue: FieldValue) => {
-            const isPresentInMapping = this.documentMapping.get(fieldValue.$field.$name);
-            if (!isPresentInMapping) {
+            const mappingField = this.documentMapping.get(fieldValue.$field.$name);
+            if (!mappingField) {
                 throw new Error("Document incosistent.");
             }
         });

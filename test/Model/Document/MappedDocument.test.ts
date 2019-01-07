@@ -1,9 +1,11 @@
 import FieldValue from "../../../src/Model/Document/FieldValue";
 import MappedDocument from "../../../src/Model/Document/MappedDocument";
 import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
+import Field from "../../../src/Model/Mapping/Field";
 import ChildrenField from "../../../src/Model/Mapping/Fields/ChildrenField";
 import IdField from "../../../src/Model/Mapping/Fields/IdField";
 import StringField from "../../../src/Model/Mapping/Fields/StringField";
+import FieldType from "../../../src/Model/Mapping/FieldType";
 import { RootPostFactory } from "../../Common/Models";
 import { Builder } from "../../Infrastructure/Common/Builder";
 import { mockAuthorMapped, mockCommentsMapped } from "../../Utils/DocumentMocks";
@@ -31,6 +33,20 @@ describe("MappedDocument", () => {
             const mockFieldValues = [new FieldValue(new StringField("nam1e1"), "1")];
             const document = new MappedDocument(exampleDocumentMapping, mockFieldValues);
         }).toThrowError();
+    });
+
+    it.skip("should guard against inconsistency in child/ren.", () => {
+        expect(() => {
+            const childrenField = new ChildrenField("children", exampleDocumentMapping);
+            const mockChildMapping = Builder.mapping("test")
+            .addField(childrenField)
+            .build();
+            const emptyMapping = Builder.mapping("empty")
+            .build();
+
+            // tslint:disable-next-line:no-unused-expression
+            new MappedDocument(mockChildMapping, [new FieldValue(childrenField, new MappedDocument(emptyMapping))]);
+         }).toThrowError();
     });
 
     it("should compute changes for child", () => {
