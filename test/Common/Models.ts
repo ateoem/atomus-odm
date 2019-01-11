@@ -1,8 +1,8 @@
+import ChildField from "../../src/Model/Mapping/Field/ChildField";
+import ChildrenField from "../../src/Model/Mapping/Field/ChildrenField";
+import StringField from "../../src/Model/Mapping/Field/StringField";
+import IdField from "../../src/Model/Mapping/Field/UuidField";
 import MappedDocument from "../../src/Model/ODM/MappedDocument";
-import ChildField from "../../src/Model/Schema/Fields/ChildField";
-import ChildrenField from "../../src/Model/Schema/Fields/ChildrenField";
-import StringField from "../../src/Model/Schema/Fields/StringField";
-import IdField from "../../src/Model/Schema/Fields/UuidField";
 import { Builder } from "../Infrastructure/Common/Builder";
 
 export const AuthorMapping = Builder

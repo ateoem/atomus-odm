@@ -1,14 +1,14 @@
-import ChildFieldValue from "../../../src/Model/Mapping/ChildFieldValue";
-import ChildrenFieldValue from "../../../src/Model/Mapping/ChildrenFieldValue";
-import FieldValue from "../../../src/Model/Mapping/FieldValue";
-import StringFieldValue from "../../../src/Model/Mapping/StringFieldValue";
+import FieldType from "../../../src/Model/Mapping/Enum/FieldType";
+import ChildrenField from "../../../src/Model/Mapping/Field/ChildrenField";
+import Field from "../../../src/Model/Mapping/Field/Field";
+import StringField from "../../../src/Model/Mapping/Field/StringField";
+import UuidField from "../../../src/Model/Mapping/Field/UuidField";
+import DocumentMapping from "../../../src/Model/Mapping/FieldCollection";
+import ChildFieldValue from "../../../src/Model/Mapping/FieldValue/ChildFieldValue";
+import ChildrenFieldValue from "../../../src/Model/Mapping/FieldValue/ChildrenFieldValue";
+import FieldValue from "../../../src/Model/Mapping/FieldValue/FieldValue";
+import StringFieldValue from "../../../src/Model/Mapping/FieldValue/StringFieldValue";
 import MappedDocument from "../../../src/Model/ODM/MappedDocument";
-import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
-import Field from "../../../src/Model/Schema/Field";
-import ChildrenField from "../../../src/Model/Schema/Fields/ChildrenField";
-import StringField from "../../../src/Model/Schema/Fields/StringField";
-import UuidField from "../../../src/Model/Schema/Fields/UuidField";
-import FieldType from "../../../src/Model/Schema/FieldType";
 import { RootPostFactory } from "../../Common/Models";
 import { Builder } from "../../Infrastructure/Common/Builder";
 import { mockAuthorMapped, mockCommentsMapped } from "../../Utils/DocumentMocks";
@@ -38,7 +38,7 @@ describe("MappedDocument", () => {
         }).toThrowError();
     });
 
-    it.skip("should guard against inconsistency in child/ren.", () => {
+    it("should guard against inconsistency in child/ren.", () => {
         expect(() => {
             const childrenField = new ChildrenField("children", exampleDocumentMapping);
             const mockChildMapping = Builder.mapping("test")
@@ -49,7 +49,7 @@ describe("MappedDocument", () => {
 
             // tslint:disable-next-line:no-unused-expression
             new MappedDocument(mockChildMapping, [new ChildFieldValue(childrenField, new MappedDocument(emptyMapping))]);
-         }).toThrowError();
+         }).toThrowError("a");
     });
 
     it("should compute changes for child", () => {

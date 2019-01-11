@@ -1,13 +1,13 @@
 import generateFieldValue from "../../Model/Mapping";
-import FieldValue from "../../Model/Mapping/FieldValue";
+import FieldType from "../../Model/Mapping/Enum/FieldType";
+import ChildField from "../../Model/Mapping/Field/ChildField";
+import ChildrenField from "../../Model/Mapping/Field/ChildrenField";
+import Field from "../../Model/Mapping/Field/Field";
+import DocumentMapping from "../../Model/Mapping/FieldCollection";
+import FieldValue from "../../Model/Mapping/FieldValue/FieldValue";
 import DocumentManager from "../../Model/ODM/DocumentManager";
 import IDocumentNormalizer from "../../Model/ODM/IDocumentNormalizer";
 import MappedDocument from "../../Model/ODM/MappedDocument";
-import DocumentMapping from "../../Model/Schema/DocumentMapping";
-import Field from "../../Model/Schema/Field";
-import ChildField from "../../Model/Schema/Fields/ChildField";
-import ChildrenField from "../../Model/Schema/Fields/ChildrenField";
-import FieldType from "../../Model/Schema/FieldType";
 
 class JSONDenormalizer implements IDocumentNormalizer {
     private manager: DocumentManager;

@@ -1,16 +1,16 @@
-import DocumentChange from "../Changes/DocumentChange";
-import DocumentChanges from "../Changes/DocumentChanges";
 import generateFieldValue from "../Mapping";
-import ChildFieldValue from "../Mapping/ChildFieldValue";
-import ChildrenFieldValue from "../Mapping/ChildrenFieldValue";
-import FieldValue from "../Mapping/FieldValue";
-import StringFieldValue from "../Mapping/StringFieldValue";
-import DocumentMapping from "../Schema/DocumentMapping";
-import Field from "../Schema/Field";
-import ChildField from "../Schema/Fields/ChildField";
-import ChildrenField from "../Schema/Fields/ChildrenField";
-import FieldType from "../Schema/FieldType";
-import Document from "./Document";
+import Document from "../Mapping/Document";
+import DocumentChange from "../Mapping/DocumentChange";
+import DocumentChanges from "../Mapping/DocumentChanges";
+import FieldType from "../Mapping/Enum/FieldType";
+import ChildField from "../Mapping/Field/ChildField";
+import ChildrenField from "../Mapping/Field/ChildrenField";
+import Field from "../Mapping/Field/Field";
+import DocumentMapping from "../Mapping/FieldCollection";
+import ChildFieldValue from "../Mapping/FieldValue/ChildFieldValue";
+import ChildrenFieldValue from "../Mapping/FieldValue/ChildrenFieldValue";
+import FieldValue from "../Mapping/FieldValue/FieldValue";
+import StringFieldValue from "../Mapping/FieldValue/StringFieldValue";
 
 class MappedDocument extends Document {
 

@@ -1,13 +1,13 @@
-import ChildFieldValue from "../../../src/Model/Mapping/ChildFieldValue";
-import FieldValue from "../../../src/Model/Mapping/FieldValue";
-import StringFieldValue from "../../../src/Model/Mapping/StringFieldValue";
-import UuidFieldValue from "../../../src/Model/Mapping/UuidFieldValue";
+import ChildField from "../../../src/Model/Mapping/Field/ChildField";
+import StringField from "../../../src/Model/Mapping/Field/StringField";
+import IdField from "../../../src/Model/Mapping/Field/UuidField";
+import DocumentMapping from "../../../src/Model/Mapping/FieldCollection";
+import ChildFieldValue from "../../../src/Model/Mapping/FieldValue/ChildFieldValue";
+import FieldValue from "../../../src/Model/Mapping/FieldValue/FieldValue";
+import StringFieldValue from "../../../src/Model/Mapping/FieldValue/StringFieldValue";
+import UuidFieldValue from "../../../src/Model/Mapping/FieldValue/UuidFieldValue";
 import MappedDocument from "../../../src/Model/ODM/MappedDocument";
 import ManagedDocument from "../../../src/Model/ODM/RootDocument";
-import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
-import ChildField from "../../../src/Model/Schema/Fields/ChildField";
-import StringField from "../../../src/Model/Schema/Fields/StringField";
-import IdField from "../../../src/Model/Schema/Fields/UuidField";
 import { RootUserMapping } from "../../Common/Models";
 import { Builder } from "../../Infrastructure/Common/Builder";
 

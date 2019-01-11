@@ -1,4 +1,4 @@
-import DocumentMapping from "../Schema/DocumentMapping";
+import DocumentMapping from "../Mapping/FieldCollection";
 import DocumentManager from "./DocumentManager";
 
 abstract class DocumentRepository {

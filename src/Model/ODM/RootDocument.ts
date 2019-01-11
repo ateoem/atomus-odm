@@ -1,7 +1,7 @@
 import {v1 as uuid} from "uuid";
-import FieldValue from "../Mapping/FieldValue";
-import UuidFieldValue from "../Mapping/UuidFieldValue";
-import Document from "./Document";
+import Document from "../Mapping/Document";
+import FieldValue from "../Mapping/FieldValue/FieldValue";
+import UuidFieldValue from "../Mapping/FieldValue/UuidFieldValue";
 import MappedDocument from "./MappedDocument";
 
 class ManagedDocument extends Document {

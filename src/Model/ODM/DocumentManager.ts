@@ -1,4 +1,4 @@
-import DocumentMapping from "../Schema/DocumentMapping";
+import DocumentMapping from "../Mapping/FieldCollection";
 import DocumentRepository from "./DocumentRepository";
 import IDocumentNormalizer from "./IDocumentNormalizer";
 import MappedDocument from "./MappedDocument";

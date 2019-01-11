@@ -1,7 +1,7 @@
-import generateValueObject from "../Mapping";
-import generateFieldValue from "../Mapping";
-import FieldValue from "../Mapping/FieldValue";
-import Field from "../Schema/Field";
+import generateValueObject from "./";
+import generateFieldValue from "./";
+import Field from "./Field/Field";
+import FieldValue from "./FieldValue/FieldValue";
 
 class DocumentChange {
     private field: Field;

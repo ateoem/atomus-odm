@@ -1,7 +1,7 @@
-import DocumentChange from "../../../src/Model/Changes/DocumentChange";
-import Field from "../../../src/Model/Schema/Field";
-import StringField from "../../../src/Model/Schema/Fields/StringField";
-import FieldType from "../../../src/Model/Schema/FieldType";
+import DocumentChange from "../../../src/Model/Mapping/DocumentChange";
+import FieldType from "../../../src/Model/Mapping/Enum/FieldType";
+import Field from "../../../src/Model/Mapping/Field/Field";
+import StringField from "../../../src/Model/Mapping/Field/StringField";
 
 describe("DocumentChange", () => {
     it("should have setters/getters.", () => {
