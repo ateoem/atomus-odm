@@ -1,12 +1,16 @@
-import DocumentMapping from "../Mapping/DocumentMapping";
-import Field from "../Mapping/Field";
-import ChildField from "../Mapping/Fields/ChildField";
-import ChildrenField from "../Mapping/Fields/ChildrenField";
-import FieldType from "../Mapping/FieldType";
+import DocumentChange from "../Changes/DocumentChange";
+import DocumentChanges from "../Changes/DocumentChanges";
+import generateFieldValue from "../Mapping";
+import ChildFieldValue from "../Mapping/ChildFieldValue";
+import ChildrenFieldValue from "../Mapping/ChildrenFieldValue";
+import FieldValue from "../Mapping/FieldValue";
+import StringFieldValue from "../Mapping/StringFieldValue";
+import DocumentMapping from "../Schema/DocumentMapping";
+import Field from "../Schema/Field";
+import ChildField from "../Schema/Fields/ChildField";
+import ChildrenField from "../Schema/Fields/ChildrenField";
+import FieldType from "../Schema/FieldType";
 import Document from "./Document";
-import DocumentChange from "./DocumentChange";
-import DocumentChanges from "./DocumentChanges";
-import FieldValue from "./FieldValue";
 
 class MappedDocument extends Document {
 
@@ -151,12 +155,12 @@ class MappedDocument extends Document {
             if (!this.$fieldValues.has(field.$name)) {
                 if (field instanceof ChildField) {
                     this.fieldValues.set(field.$name,
-                        new FieldValue(field, new MappedDocument(field.$mapping)),
+                        new ChildFieldValue(field, new MappedDocument(field.$mapping)),
                     );
                 } else if (field instanceof ChildrenField) {
-                    this.fieldValues.set(field.$name, new FieldValue(field, []));
+                    this.fieldValues.set(field.$name, new ChildrenFieldValue(field, []));
                 } else {
-                    this.fieldValues.set(field.$name, new FieldValue(field, ""));
+                    this.fieldValues.set(field.$name, generateFieldValue(field, ""));
                 }
             }
         });

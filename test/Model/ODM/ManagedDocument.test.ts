@@ -1,10 +1,13 @@
-import FieldValue from "../../../src/Model/Document/FieldValue";
-import MappedDocument from "../../../src/Model/Document/MappedDocument";
-import ManagedDocument from "../../../src/Model/Document/RootDocument";
-import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
-import ChildField from "../../../src/Model/Mapping/Fields/ChildField";
-import IdField from "../../../src/Model/Mapping/Fields/IdField";
-import StringField from "../../../src/Model/Mapping/Fields/StringField";
+import ChildFieldValue from "../../../src/Model/Mapping/ChildFieldValue";
+import FieldValue from "../../../src/Model/Mapping/FieldValue";
+import StringFieldValue from "../../../src/Model/Mapping/StringFieldValue";
+import UuidFieldValue from "../../../src/Model/Mapping/UuidFieldValue";
+import MappedDocument from "../../../src/Model/ODM/MappedDocument";
+import ManagedDocument from "../../../src/Model/ODM/RootDocument";
+import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
+import ChildField from "../../../src/Model/Schema/Fields/ChildField";
+import StringField from "../../../src/Model/Schema/Fields/StringField";
+import IdField from "../../../src/Model/Schema/Fields/UuidField";
 import { RootUserMapping } from "../../Common/Models";
 import { Builder } from "../../Infrastructure/Common/Builder";
 
@@ -16,9 +19,9 @@ describe("ManagedDocument", () => {
 
         const fields = [ nameField, surnameField, idField ];
         const fieldValues = [
-            new FieldValue(nameField, { value: "test" }),
-            new FieldValue(surnameField, { value: "ipsum" }),
-            new FieldValue(idField, { value: "9181ee1a-030b-40d3-9d2c-168db5c03c5e" }),
+            new StringFieldValue(nameField, "test"),
+            new StringFieldValue(surnameField, "ipsum"),
+            new UuidFieldValue(idField, "9181ee1a-030b-40d3-9d2c-168db5c03c5e"),
         ];
         const documentMapping = new DocumentMapping("test_aggr", fields);
         const document = new MappedDocument(documentMapping, fieldValues);
@@ -55,8 +58,8 @@ describe("ManagedDocument", () => {
 
         const fields = [ nameField, surnameField, idField ];
         const fieldValues = [
-            new FieldValue(nameField, { value: "test" }),
-            new FieldValue(surnameField, { value: "ipsum" }),
+            new StringFieldValue(nameField, "test"),
+            new StringFieldValue(surnameField, "ipsum"),
         ];
 
         const documentMapping = new DocumentMapping("test_aggr", fields);
@@ -72,12 +75,12 @@ describe("ManagedDocument", () => {
     it("Should compute changes between child.", () => {
         const loremField = new StringField("lorem");
         const idField = new IdField("id");
-        const loremFieldValue = new FieldValue(loremField, "test");
+        const loremFieldValue = new StringFieldValue(loremField, "test");
 
         const childDocumentMapping = new DocumentMapping("lorem_child", [ loremField ]);
         const childField = new ChildField("lorem_child", childDocumentMapping);
 
-        const childFieldValue = new FieldValue(
+        const childFieldValue = new ChildFieldValue(
             childField,
             new MappedDocument(childDocumentMapping, [loremFieldValue],
                 ),

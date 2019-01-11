@@ -1,6 +1,6 @@
-import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
 import DocumentManager from "../../../src/Model/ODM/DocumentManager";
 import DocumentRepository from "../../../src/Model/ODM/DocumentRepository";
+import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
 
 class DocumentManagerMock extends DocumentManager {
     public flush() {

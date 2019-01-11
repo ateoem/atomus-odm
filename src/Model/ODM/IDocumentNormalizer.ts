@@ -1,6 +1,6 @@
-import MappedDocument from "../Document/MappedDocument";
-import DocumentMapping from "../Mapping/DocumentMapping";
+import DocumentMapping from "../Schema/DocumentMapping";
 import DocumentManager from "./DocumentManager";
+import MappedDocument from "./MappedDocument";
 
 interface IDocumentNormalizer {
     normalize(document: MappedDocument): object;

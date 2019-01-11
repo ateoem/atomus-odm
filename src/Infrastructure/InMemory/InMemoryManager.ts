@@ -1,14 +1,15 @@
-import DocumentChange from "../../Model/Document/DocumentChange";
-import FieldValue from "../../Model/Document/FieldValue";
-import MappedDocument from "../../Model/Document/MappedDocument";
-import ManagedDocument from "../../Model/Document/RootDocument";
-import DocumentMapping from "../../Model/Mapping/DocumentMapping";
-import Field from "../../Model/Mapping/Field";
-import ChildField from "../../Model/Mapping/Fields/ChildField";
-import ChildrenField from "../../Model/Mapping/Fields/ChildrenField";
+import DocumentChange from "../../Model/Changes/DocumentChange";
+import generateFieldValue from "../../Model/Mapping";
+import FieldValue from "../../Model/Mapping/FieldValue";
 import DocumentManager from "../../Model/ODM/DocumentManager";
 import DocumentRepository from "../../Model/ODM/DocumentRepository";
 import IDocumentNormalizer from "../../Model/ODM/IDocumentNormalizer";
+import MappedDocument from "../../Model/ODM/MappedDocument";
+import ManagedDocument from "../../Model/ODM/RootDocument";
+import DocumentMapping from "../../Model/Schema/DocumentMapping";
+import Field from "../../Model/Schema/Field";
+import ChildField from "../../Model/Schema/Fields/ChildField";
+import ChildrenField from "../../Model/Schema/Fields/ChildrenField";
 import InMemoryRepository from "./InMemoryRepository";
 
 class InMemoryManager extends DocumentManager {
@@ -62,7 +63,7 @@ class InMemoryManager extends DocumentManager {
                     return;
                 }
                 const newValue = document.$changes.get(field.$name).$updated;
-                document.$fieldValues.set(field.$name, new FieldValue(field, newValue));
+                document.$fieldValues.set(field.$name, generateFieldValue(field, newValue));
                 document.$changes.delete(field.$name);
             }
         });

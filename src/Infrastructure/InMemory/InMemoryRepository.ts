@@ -1,8 +1,8 @@
 import * as PropertyPath from "get-value";
-import ManagedDocument from "../../Model/Document/RootDocument";
-import DocumentMapping from "../../Model/Mapping/DocumentMapping";
 import DocumentManager from "../../Model/ODM/DocumentManager";
 import DocumentRepository from "../../Model/ODM/DocumentRepository";
+import ManagedDocument from "../../Model/ODM/RootDocument";
+import DocumentMapping from "../../Model/Schema/DocumentMapping";
 
 class InMemoryRepository extends DocumentRepository {
     protected data: Map<string, object>;

@@ -1,8 +1,8 @@
-import MappedDocument from "../Document/MappedDocument";
-import ManagedDocument from "../Document/RootDocument";
-import DocumentMapping from "../Mapping/DocumentMapping";
+import DocumentMapping from "../Schema/DocumentMapping";
 import DocumentRepository from "./DocumentRepository";
 import IDocumentNormalizer from "./IDocumentNormalizer";
+import MappedDocument from "./MappedDocument";
+import ManagedDocument from "./RootDocument";
 
 abstract class DocumentManager {
     protected managedDocuments: Map<string, ManagedDocument>;

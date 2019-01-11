@@ -1,7 +1,7 @@
-import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
-import Field from "../../../src/Model/Mapping/Field";
-import StringField from "../../../src/Model/Mapping/Fields/StringField";
-import FieldType from "../../../src/Model/Mapping/FieldType";
+import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
+import Field from "../../../src/Model/Schema/Field";
+import StringField from "../../../src/Model/Schema/Fields/StringField";
+import FieldType from "../../../src/Model/Schema/FieldType";
 
 describe("DocumentMapping", () => {
     it("should have setters/getters with constructor.", () => {

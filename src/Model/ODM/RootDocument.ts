@@ -1,6 +1,7 @@
 import {v1 as uuid} from "uuid";
+import FieldValue from "../Mapping/FieldValue";
+import UuidFieldValue from "../Mapping/UuidFieldValue";
 import Document from "./Document";
-import FieldValue from "./FieldValue";
 import MappedDocument from "./MappedDocument";
 
 class ManagedDocument extends Document {
@@ -52,7 +53,7 @@ class ManagedDocument extends Document {
         if (uuidFieldValue.$value !== "") {
             return;
         }
-        const uuidFieldValueTmp = new FieldValue(uuidField, uuid());
+        const uuidFieldValueTmp = new UuidFieldValue(uuidField, uuid());
         this.document.$fieldValues.set("id", uuidFieldValueTmp);
     }
 }

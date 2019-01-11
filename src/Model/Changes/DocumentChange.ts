@@ -1,16 +1,17 @@
-import Field from "../Mapping/Field";
-import generateValueObject from "./ValueObject";
-import ValueObject from "./ValueObject/ValueObject";
+import generateValueObject from "../Mapping";
+import generateFieldValue from "../Mapping";
+import FieldValue from "../Mapping/FieldValue";
+import Field from "../Schema/Field";
 
 class DocumentChange {
     private field: Field;
-    private old: ValueObject;
-    private updated: ValueObject;
+    private old: FieldValue;
+    private updated: FieldValue;
 
     constructor(field: Field, old: any, updated: any) {
         this.field = field;
-        this.old = generateValueObject(field, old);
-        this.updated = generateValueObject(field, updated);
+        this.old = generateFieldValue(field, old);
+        this.updated = generateFieldValue(field, updated);
     }
 
     public get $field(): Field {

@@ -1,12 +1,13 @@
-import FieldValue from "../../Model/Document/FieldValue";
-import MappedDocument from "../../Model/Document/MappedDocument";
-import DocumentMapping from "../../Model/Mapping/DocumentMapping";
-import Field from "../../Model/Mapping/Field";
-import ChildField from "../../Model/Mapping/Fields/ChildField";
-import ChildrenField from "../../Model/Mapping/Fields/ChildrenField";
-import FieldType from "../../Model/Mapping/FieldType";
+import generateFieldValue from "../../Model/Mapping";
+import FieldValue from "../../Model/Mapping/FieldValue";
 import DocumentManager from "../../Model/ODM/DocumentManager";
 import IDocumentNormalizer from "../../Model/ODM/IDocumentNormalizer";
+import MappedDocument from "../../Model/ODM/MappedDocument";
+import DocumentMapping from "../../Model/Schema/DocumentMapping";
+import Field from "../../Model/Schema/Field";
+import ChildField from "../../Model/Schema/Fields/ChildField";
+import ChildrenField from "../../Model/Schema/Fields/ChildrenField";
+import FieldType from "../../Model/Schema/FieldType";
 
 class JSONDenormalizer implements IDocumentNormalizer {
     private manager: DocumentManager;
@@ -42,7 +43,7 @@ class JSONDenormalizer implements IDocumentNormalizer {
         const fieldVals = Object.keys(tmp).map((key) => {
             const gotField: Field = mappingDocument.$fields.get(key);
             if (gotField instanceof ChildField) {
-                return new FieldValue(
+                return generateFieldValue(
                     gotField,
                     this.denormalize(tmp[key], gotField.$mapping),
                 );
@@ -50,9 +51,9 @@ class JSONDenormalizer implements IDocumentNormalizer {
                 const mappedArray = tmp[key].map((obj) =>
                     this.denormalize(obj, gotField.$mapping),
                 );
-                return new FieldValue(gotField, mappedArray);
+                return generateFieldValue(gotField, mappedArray);
             } else {
-                return new FieldValue(gotField, tmp[key]);
+                return generateFieldValue(gotField, tmp[key]);
             }
         });
 

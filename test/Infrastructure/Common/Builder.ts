@@ -1,9 +1,17 @@
 import JSONDenormalizer from "../../../src/Infrastructure/Common/JSONDenormalizer";
-import FieldValue from "../../../src/Model/Document/FieldValue";
-import MappedDocument from "../../../src/Model/Document/MappedDocument";
-import DocumentMapping from "../../../src/Model/Mapping/DocumentMapping";
-import Field from "../../../src/Model/Mapping/Field";
+import ChildFieldValue from "../../../src/Model/Mapping/ChildFieldValue";
+import ChildrenFieldValue from "../../../src/Model/Mapping/ChildrenFieldValue";
+import FieldValue from "../../../src/Model/Mapping/FieldValue";
+import StringFieldValue from "../../../src/Model/Mapping/StringFieldValue";
+import UuidFieldValue from "../../../src/Model/Mapping/UuidFieldValue";
 import DocumentManager from "../../../src/Model/ODM/DocumentManager";
+import MappedDocument from "../../../src/Model/ODM/MappedDocument";
+import DocumentMapping from "../../../src/Model/Schema/DocumentMapping";
+import Field from "../../../src/Model/Schema/Field";
+import ChildField from "../../../src/Model/Schema/Fields/ChildField";
+import ChildrenField from "../../../src/Model/Schema/Fields/ChildrenField";
+import StringField from "../../../src/Model/Schema/Fields/StringField";
+import UuidField from "../../../src/Model/Schema/Fields/UuidField";
 import DocumentManagerMock from "./DocumentManagerMock";
 
 class MappingBuilder {
@@ -40,7 +48,15 @@ class MappedDocumentBuilder {
         if (!field) {
             throw new Error("Field not found!" + name + this.mapping.$name);
         }
-        this.fieldValues.push(new FieldValue(field, value));
+        if (field instanceof StringField) {
+            this.fieldValues.push(new StringFieldValue(field, value));
+        } else if (field instanceof UuidField) {
+            this.fieldValues.push(new UuidFieldValue(field, value));
+        } else if (field instanceof ChildrenField) {
+            this.fieldValues.push(new ChildrenFieldValue(field, value));
+        } else if (field instanceof ChildField) {
+            this.fieldValues.push(new ChildFieldValue(field, value));
+        }
 
         return this;
     }
