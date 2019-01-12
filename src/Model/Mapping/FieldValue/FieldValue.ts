@@ -33,6 +33,7 @@ abstract class FieldValue implements ICloneable {
 
     public isEqual(value: any): boolean {
         return value instanceof FieldValue
+            && value.constructor.name === this.constructor.name
             && value.$field.isEqual(this.field)
             && value.$value === this.value;
     }

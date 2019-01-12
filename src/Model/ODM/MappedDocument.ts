@@ -1,5 +1,5 @@
 import generateFieldValue from "../Mapping";
-import Document from "../Mapping/Document";
+import Aggregate from "../Mapping/Aggregate";
 import DocumentChange from "../Mapping/DocumentChange";
 import DocumentChanges from "../Mapping/DocumentChanges";
 import FieldType from "../Mapping/Enum/FieldType";
@@ -12,7 +12,7 @@ import ChildrenFieldValue from "../Mapping/FieldValue/ChildrenFieldValue";
 import FieldValue from "../Mapping/FieldValue/FieldValue";
 import StringFieldValue from "../Mapping/FieldValue/StringFieldValue";
 
-class MappedDocument extends Document {
+class MappedDocument extends Aggregate {
 
     public get $id(): string {
         return this.fieldValues.get("id").$value;

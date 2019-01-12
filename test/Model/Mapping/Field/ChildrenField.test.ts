@@ -4,16 +4,11 @@ import ChildrenField from "../../../../src/Model/Mapping/Field/ChildrenField";
 import IdField from "../../../../src/Model/Mapping/Field/IdField";
 import StringField from "../../../../src/Model/Mapping/Field/StringField";
 import FieldCollection from "../../../../src/Model/Mapping/FieldCollection";
+import { nameField, surnameField, userFieldsArray } from "../../../Utils/ExampleFields";
 
 describe("ChildField", () => {
-    const nameField = new StringField("name");
-    const surnameField = new StringField("surname");
-    const fields = [
-        nameField,
-        surnameField,
-    ];
 
-    const collection = new FieldCollection("test", fields);
+    const collection = new FieldCollection("test", userFieldsArray);
     const differentCollection = new FieldCollection("test", [nameField]);
 
     test("getters/setters/clone", () => {

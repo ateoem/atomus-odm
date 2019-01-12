@@ -5,7 +5,7 @@ import DocumentMapping from "../../../src/Model/Mapping/FieldCollection";
 import ChildFieldValue from "../../../src/Model/Mapping/FieldValue/ChildFieldValue";
 import FieldValue from "../../../src/Model/Mapping/FieldValue/FieldValue";
 import StringFieldValue from "../../../src/Model/Mapping/FieldValue/StringFieldValue";
-import UuidFieldValue from "../../../src/Model/Mapping/FieldValue/UuidFieldValue";
+import IdFieldValue from "../../../src/Model/Mapping/FieldValue/UuidFieldValue";
 import MappedDocument from "../../../src/Model/ODM/MappedDocument";
 import ManagedDocument from "../../../src/Model/ODM/RootDocument";
 import { RootUserMapping } from "../../Common/Models";
@@ -21,7 +21,7 @@ describe("ManagedDocument", () => {
         const fieldValues = [
             new StringFieldValue(nameField, "test"),
             new StringFieldValue(surnameField, "ipsum"),
-            new UuidFieldValue(idField, "9181ee1a-030b-40d3-9d2c-168db5c03c5e"),
+            new IdFieldValue(idField, "9181ee1a-030b-40d3-9d2c-168db5c03c5e"),
         ];
         const documentMapping = new DocumentMapping("test_aggr", fields);
         const document = new MappedDocument(documentMapping, fieldValues);

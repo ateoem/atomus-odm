@@ -1,10 +1,10 @@
 import {v1 as uuid} from "uuid";
-import Document from "../Mapping/Document";
+import Aggregate from "../Mapping/Aggregate";
 import FieldValue from "../Mapping/FieldValue/FieldValue";
-import UuidFieldValue from "../Mapping/FieldValue/UuidFieldValue";
+import IdFieldValue from "../Mapping/FieldValue/UuidFieldValue";
 import MappedDocument from "./MappedDocument";
 
-class ManagedDocument extends Document {
+class ManagedDocument extends Aggregate {
 
     public get $id() {
         return this.document.$id;
@@ -53,7 +53,7 @@ class ManagedDocument extends Document {
         if (uuidFieldValue.$value !== "") {
             return;
         }
-        const uuidFieldValueTmp = new UuidFieldValue(uuidField, uuid());
+        const uuidFieldValueTmp = new IdFieldValue(uuidField, uuid());
         this.document.$fieldValues.set("id", uuidFieldValueTmp);
     }
 }

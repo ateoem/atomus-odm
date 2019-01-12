@@ -9,7 +9,7 @@ import ChildFieldValue from "../../../src/Model/Mapping/FieldValue/ChildFieldVal
 import ChildrenFieldValue from "../../../src/Model/Mapping/FieldValue/ChildrenFieldValue";
 import FieldValue from "../../../src/Model/Mapping/FieldValue/FieldValue";
 import StringFieldValue from "../../../src/Model/Mapping/FieldValue/StringFieldValue";
-import UuidFieldValue from "../../../src/Model/Mapping/FieldValue/UuidFieldValue";
+import IdFieldValue from "../../../src/Model/Mapping/FieldValue/UuidFieldValue";
 import DocumentManager from "../../../src/Model/ODM/DocumentManager";
 import MappedDocument from "../../../src/Model/ODM/MappedDocument";
 import DocumentManagerMock from "./DocumentManagerMock";
@@ -51,7 +51,7 @@ class MappedDocumentBuilder {
         if (field instanceof StringField) {
             this.fieldValues.push(new StringFieldValue(field, value));
         } else if (field instanceof UuidField) {
-            this.fieldValues.push(new UuidFieldValue(field, value));
+            this.fieldValues.push(new IdFieldValue(field, value));
         } else if (field instanceof ChildrenField) {
             this.fieldValues.push(new ChildrenFieldValue(field, value));
         } else if (field instanceof ChildField) {

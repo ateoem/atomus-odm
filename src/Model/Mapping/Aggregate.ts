@@ -3,18 +3,27 @@ import IEqualable from "../Common/IEqualable";
 import Field from "./Field/Field";
 import FieldCollection from "./FieldCollection";
 import FieldValue from "./FieldValue/FieldValue";
-import FieldValueGenerator from "./FieldValue/FieldValueGenerator";
+import FieldValueFactory from "./FieldValue/FieldValueFactory";
 import FieldValueCollection from "./FieldValueCollection";
+import IAggregate from "./IAggregate";
 
-class Aggregate implements IEqualable, ICloneable {
+class Aggregate implements IAggregate {
     protected fields: FieldCollection;
     protected values: FieldValueCollection;
     
-    constructor(fieldCollection: FieldCollection, fieldValueCollection: FieldValueCollection) {
+    constructor(fieldCollection: FieldCollection, fieldValueCollection: FieldValueCollection = null) {
         this.fields = fieldCollection.clone();
-        this.values = fieldValueCollection.clone();
+        this.values = (fieldValueCollection) ? fieldValueCollection.clone() : new FieldValueCollection();
         this.initFields();
         this.guardAgainstInconsistency();
+    }
+
+    public get $fields(): FieldCollection {
+		return this.fields.clone();
+    }
+    
+    public get $values(): FieldValueCollection {
+        return this.values.clone();
     }
 
     public clone(): Aggregate {
@@ -32,7 +41,7 @@ class Aggregate implements IEqualable, ICloneable {
     private initFields() {
         this.fields.$fieldsArray.forEach( (field: Field) => {
             if (!this.values.has(field.$name)) {
-                this.values = this.values.addField(FieldValueGenerator(field));
+                this.values = this.values.addField(FieldValueFactory(field));
             }
         });
     }
