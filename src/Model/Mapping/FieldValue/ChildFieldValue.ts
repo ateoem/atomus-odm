@@ -1,11 +1,9 @@
-import MappedDocument from "../../ODM/MappedDocument";
+import Aggregate from "../Aggregate";
 import ChildField from "../Field/ChildField";
-import ChildrenField from "../Field/ChildrenField";
-import Field from "../Field/Field";
 import FieldValue from "./FieldValue";
 
 class ChildFieldValue extends FieldValue {
-    constructor(field: ChildField, value: null|Document = null) {
+    constructor(field: ChildField, value: null|Aggregate = null) {
         super(field, value);
     }
 }

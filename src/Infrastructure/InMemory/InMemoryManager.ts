@@ -1,5 +1,5 @@
 import generateFieldValue from "../../Model/Mapping";
-import DocumentChange from "../../Model/Mapping/DocumentChange";
+import DocumentChange from "../../Model/Mapping/AggregateChange";
 import ChildField from "../../Model/Mapping/Field/ChildField";
 import ChildrenField from "../../Model/Mapping/Field/ChildrenField";
 import Field from "../../Model/Mapping/Field/Field";

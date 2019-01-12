@@ -1,17 +1,16 @@
-import ChildrenField from "../../../src/Model/Mapping/Field/ChildrenField";
 import IdField from "../../../src/Model/Mapping/Field/IdField";
 import StringField from "../../../src/Model/Mapping/Field/StringField";
 import FieldCollection from "../../../src/Model/Mapping/FieldCollection";
-import { userFieldsArray } from "../../Utils/ExampleFields";
+import { FIELDS_ARRAY_USER } from "../../Utils/ExampleFields";
 
 describe("FieldCollection", () => {
     const nameField = new StringField("name");
     const surnameField = new StringField("surname");
 
     it("should have setters/getters.", () => {
-        const collection = new FieldCollection("test_mapping", userFieldsArray);
+        const collection = new FieldCollection("test_mapping", FIELDS_ARRAY_USER);
 
-        expect(collection.$fieldsArray).toEqual(userFieldsArray);
+        expect(collection.$fieldsArray).toEqual(FIELDS_ARRAY_USER);
         expect(collection.size()).toEqual(2);
         expect(collection.has("name")).toEqual(true);
         expect(collection.$name).toBe("test_mapping");
@@ -29,22 +28,22 @@ describe("FieldCollection", () => {
     });
     
     it("should check if Field Collections are equal when same fields applied.", () => {
-        const oneCollection = new FieldCollection("test_mapping", userFieldsArray);
-        const secondCollection = new FieldCollection("test_mapping", userFieldsArray);
+        const oneCollection = new FieldCollection("test_mapping", FIELDS_ARRAY_USER);
+        const secondCollection = new FieldCollection("test_mapping", FIELDS_ARRAY_USER);
 
         expect(oneCollection.isEqual(secondCollection)).toBe(true);
     });
 
     it("should check if Field Collections are equal when different names.", () => {
-        const oneCollection = new FieldCollection("test_mapping", userFieldsArray);
-        const secondCollection = new FieldCollection("test_mapping2", userFieldsArray);
+        const oneCollection = new FieldCollection("test_mapping", FIELDS_ARRAY_USER);
+        const secondCollection = new FieldCollection("test_mapping2", FIELDS_ARRAY_USER);
 
         expect(oneCollection.isEqual(secondCollection)).toBe(false);
     });
 
     it("should check if Field Collection are equal when has different fields.", () => {
-        const oneCollection = new FieldCollection("test_mapping", userFieldsArray);
-        const secondCollection = new FieldCollection("test_mapping2", [...userFieldsArray, new IdField("_id")]);
+        const oneCollection = new FieldCollection("test_mapping", FIELDS_ARRAY_USER);
+        const secondCollection = new FieldCollection("test_mapping2", [...FIELDS_ARRAY_USER, new IdField("_id")]);
         expect(oneCollection.isEqual(secondCollection)).toBe(false);
     });
 

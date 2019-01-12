@@ -1,7 +1,6 @@
 import ICloneable from "../../Common/IClonable";
 import IEqualable from "../../Common/IEqualable";
-import DocumentChange from "../DocumentChange";
-import DocumentChanges from "../DocumentChanges";
+import ValueChange from "../ValueChange";
 
 abstract class ValueObject implements ICloneable, IEqualable {
     protected value: any;
@@ -14,7 +13,7 @@ abstract class ValueObject implements ICloneable, IEqualable {
         return this.value;
     }
 
-    public clone() {
+    public clone(): ValueObject {
         return (this.constructor(this.$value));
     }
     // public abstract computeChanges(value: ValueObject): DocumentChange|DocumentChanges;
@@ -25,6 +24,9 @@ abstract class ValueObject implements ICloneable, IEqualable {
             && value.$value === this.$value;
     }
 
+    public getChange(valueObject: ValueObject): ValueChange {
+        return new ValueChange(this, valueObject);
+    }
 }
 
 export default ValueObject;

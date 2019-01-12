@@ -1,5 +1,5 @@
-import DocumentChange from "../../../src/Model/Mapping/DocumentChange";
-import DocumentChanges from "../../../src/Model/Mapping/DocumentChanges";
+import DocumentChange from "../../../src/Model/Mapping/AggregateChange";
+import DocumentChanges from "../../../src/Model/Mapping/AggregateChangeCollection";
 import FieldType from "../../../src/Model/Mapping/Enum/FieldType";
 import Field from "../../../src/Model/Mapping/Field/Field";
 import StringField from "../../../src/Model/Mapping/Field/StringField";

@@ -1,4 +1,4 @@
-import DocumentChange from "../../../src/Model/Mapping/DocumentChange";
+import DocumentChange from "../../../src/Model/Mapping/AggregateChange";
 import FieldType from "../../../src/Model/Mapping/Enum/FieldType";
 import Field from "../../../src/Model/Mapping/Field/Field";
 import StringField from "../../../src/Model/Mapping/Field/StringField";

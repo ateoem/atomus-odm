@@ -7,24 +7,24 @@ import NumberFieldValue from "./NumberFieldValue";
 import StringFieldValue from "./StringFieldValue";
 import IdFieldValue from "./UuidFieldValue";
 
-const ValueObjectMap: Map<FieldType, any> = new Map();
+const FieldValuesMap: Map<FieldType, any> = new Map();
 
-ValueObjectMap.set(FieldType.string, StringFieldValue);
-ValueObjectMap.set(FieldType.uuid, IdFieldValue);
-ValueObjectMap.set(FieldType.number, NumberFieldValue);
-ValueObjectMap.set(FieldType.child, ChildFieldValue);
-ValueObjectMap.set(FieldType.children, ChildrenFieldValue);
+FieldValuesMap.set(FieldType.string, StringFieldValue);
+FieldValuesMap.set(FieldType.uuid, IdFieldValue);
+FieldValuesMap.set(FieldType.number, NumberFieldValue);
+FieldValuesMap.set(FieldType.child, ChildFieldValue);
+FieldValuesMap.set(FieldType.children, ChildrenFieldValue);
 
 const FieldValueFactory = (field: Field, value?: any): FieldValue => {
-    const valueObject = ValueObjectMap.get(field.$type);
-    if (!valueObject) {
+    const fieldValue = FieldValuesMap.get(field.$type);
+    if (!fieldValue) {
         throw new Error("Field not found!");
     }
     if (!value) {
-        return new valueObject(field);
+        return new fieldValue(field);
     }
 
-    return new valueObject(field, value);
+    return new fieldValue(field, value);
 };
 
 export default FieldValueFactory;

@@ -3,12 +3,12 @@ import ChildField from "../../../../src/Model/Mapping/Field/ChildField";
 import IdField from "../../../../src/Model/Mapping/Field/IdField";
 import StringField from "../../../../src/Model/Mapping/Field/StringField";
 import FieldCollection from "../../../../src/Model/Mapping/FieldCollection";
-import { nameField, surnameField, userFields, userFieldsArray } from "../../../Utils/ExampleFields";
+import { FIELD_NAME, FIELD_SURNAME, FIELDS_ARRAY_USER, FIELDS_USER } from "../../../Utils/ExampleFields";
 
 describe("ChildField", () => {
 
-    const collection = userFields;
-    const differentCollection = new FieldCollection("test", [nameField]);
+    const collection = FIELDS_USER;
+    const differentCollection = new FieldCollection("test", [FIELD_NAME]);
 
     test("getters/setters/clone", () => {
         const field = new ChildField("lorem", collection);

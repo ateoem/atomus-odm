@@ -1,19 +1,24 @@
 import Aggregate from "../Aggregate";
+import AggregateCollection from "../AggregateCollection";
 import ValueObject from "./ValueObject";
 
 class ChildrenValueObject extends ValueObject {
-    protected value: Aggregate[];
+    protected value: AggregateCollection;
 
-    constructor(children: Aggregate[] = []) {
+    constructor(children: AggregateCollection) {
         super(children);
     }
 
-    public isEqual(value: ChildrenValueObject): boolean {
-        if (! (value instanceof ValueObject) || this.constructor.name !== value.constructor.name) {
+    get $value(): AggregateCollection {
+        return this.value;
+    }
+
+    public isEqual(valueObject: ChildrenValueObject): boolean {
+        if (! (valueObject instanceof ChildrenValueObject) || this.constructor.name !== valueObject.constructor.name) {
             return false;
         }
 
-        return this.$value.isEqual(value);
+        return this.$value.isEqual(valueObject.$value);
     }
 }
 

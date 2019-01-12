@@ -12,12 +12,12 @@ class ChildValueObject extends ValueObject {
         return this.value;
     }
 
-    public isEqual(value: ChildValueObject): boolean {
-        if (! (value instanceof ValueObject) || this.constructor.name !== value.constructor.name) {
+    public isEqual(valueObject: any): boolean {
+        if (! (valueObject instanceof ChildValueObject) || this.constructor.name !== valueObject.constructor.name) {
             return false;
         }
 
-        return this.$value.isEqual(value);
+        return this.$value.isEqual(valueObject.$value);
     }
 }
 
